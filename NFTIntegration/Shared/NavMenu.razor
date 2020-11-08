@@ -1,0 +1,127 @@
+﻿@using Blazored.Menu
+
+@*<div class="top-row pl-4 navbar navbar-dark">
+        <a class="navbar-brand" href="">Security Tools</a>
+        <button class="navbar-toggler">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span>Home
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu= !expandSubMenu">
+                    <span class="oi oi-briefcase" aria-hidden="true"></span>Information Gathering
+                </NavLink>
+                @if (expandSubMenu)
+                {
+                    //expandTimeSubMenu = !expandSubMenu;
+                    <ul class="nav flex-column">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="Nmap">
+                                <span class="oi oi-expand-down" aria-hidden="true"></span>Nmap
+                            </NavLink>
+                        </li>
+                    </ul>
+                }
+            </li>
+
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu= !expandSubMenu">
+                    <span class="oi oi-briefcase" aria-hidden="true"></span>Web Application Analysis
+                </NavLink>
+                @if (expandSubMenu)
+                {
+                    <ul class="nav flex-column">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="httack">
+                                <span class="oi oi-expand-down" aria-hidden="true"></span>httack
+                            </NavLink>
+                        </li>
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="webscarab">
+                                <span class="oi oi-expand-down" aria-hidden="true"></span>webscarab
+                            </NavLink>
+                        </li>
+                    </ul>
+                }
+            </li>
+
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu= !expandSubMenu">
+                    <span class="oi oi-briefcase" aria-hidden="true"></span>Web Vulnerability Scanners
+                </NavLink>
+                @if (expandSubMenu)
+                {
+                    <ul class="nav flex-column">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="waptit">
+                                <span class="oi oi-expand-down" aria-hidden="true"></span>waptit
+                            </NavLink>
+                        </li>
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="cadaver">
+                                <span class="oi oi-expand-down" aria-hidden="true"></span>cadaver
+                            </NavLink>
+                        </li>
+                    </ul>
+                }
+            </li>
+
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu= !expandSubMenu">
+                    <span class="oi oi-task" aria-hidden="true"></span>Password Attacks
+                </NavLink>
+                @if (expandSubMenu)
+                {
+                    <ul class="nav flex-column">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="hashidentifier">
+                                <span class="oi oi-task" aria-hidden="true"></span>hash-identifier
+                            </NavLink>
+                        </li>
+                    </ul>
+                }
+            </li>
+        </ul>
+    </div>
+
+    @code
+    {
+        private bool collapseNavMenu = true;
+        private bool expandSubMenu;
+
+        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+        private void ToggleNavMenu()
+        {
+            collapseNavMenu = !collapseNavMenu;
+        }
+    }*@
+
+
+
+<BlazoredMenu>
+    <BlazoredMenuItem>
+        <NavLink href="/" Match="NavLinkMatch.All">Home</NavLink>
+    </BlazoredMenuItem>
+    <BlazoredSubMenu Header="Sub Menu">
+        <HeaderTemplate>
+            <i class="my-cool-icon-class"></i> Sub Menu
+        </HeaderTemplate>
+        <MenuTemplate>
+            <BlazoredMenuItem>
+                <NavLink href="counter">Counter</NavLink>
+            </BlazoredMenuItem>
+            <BlazoredMenuItem>
+                <NavLink href="fetchdata">Fetch data</NavLink>
+            </BlazoredMenuItem>
+        </MenuTemplate>
+    </BlazoredSubMenu>
+</BlazoredMenu>

@@ -1,0 +1,150 @@
+﻿@page "/Nmap"
+@inject NavigationManager navigationManager
+@inject NFTIntegration.Data.ProcessInfo processInfo
+
+
+@using System.Text;
+@using System.Management.Automation;
+
+<h2>Nmap!</h2>
+
+<div id="outer-screen">
+    <div id="inner-screen">
+        <div id="output-outer"><div id="output">@((MarkupString)Output)</div></div>
+        <div id="blank-line">&nbsp;</div>
+        <div id="input-row">
+            <span>&gt;&nbsp;</span><input id="input" autocomplete="off" @bind="Input" type="text" @onkeydown="OnKeyDown" @onkeyup="Run" autofocus />
+        </div>
+    </div>
+</div>
+
+@functions {
+
+    public bool Disabled { get; set; } = true;
+    public string Output { get; set; } = string.Empty;
+    public string Input { get; set; } = string.Empty;
+
+
+    private object[] _submissionStates = new object[] { null, null };
+    private int _submissionIndex = 0;
+    private List<string> _history = new List<string>();
+    private int _historyIndex = 0;
+
+
+    public void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "ArrowUp" && _historyIndex > 0)
+        {
+            _historyIndex--;
+            Input = _history[_historyIndex];
+        }
+        else if (e.Key == "ArrowDown" && _historyIndex + 1 < _history.Count)
+        {
+            _historyIndex++;
+            Input = _history[_historyIndex];
+        }
+
+        else if (e.Key == "Escape")
+        {
+            Input = "";
+            _historyIndex = _history.Count;
+        }
+    }
+
+    public async Task Run(KeyboardEventArgs e)
+    {
+        if (e.Key != "Enter")
+        {
+            return;
+        }
+
+        var code = Input;
+        if (!string.IsNullOrEmpty(code))
+        {
+            _history.Add(code);
+        }
+        _historyIndex = _history.Count;
+        Input = "";
+
+        await RunSubmission(code);
+    }
+
+    private async Task RunSubmission(string cmdWithArgs)
+    {
+        Output += $@"<br /><span class=""info"">{System.Web.HttpUtility.HtmlEncode(cmdWithArgs)}</span>";
+
+        var previousOut = Console.Out;
+
+
+
+        try
+        {
+            var writer = new System.IO.StringWriter();
+            Console.SetOut(writer);
+
+            if (cmdWithArgs.ToUpper().Equals("CLS") || cmdWithArgs.ToUpper().Equals("CLEAR"))
+            {
+                Output = String.Empty;
+                return;
+            }
+
+            var shell = System.Management.Automation.PowerShell.Create();
+
+            shell.Commands.AddScript(cmdWithArgs);
+
+            shell.Streams.Error.DataAdded += Error_DataAdded;
+            shell.Streams.Warning.DataAdded += Warning_DataAdded;
+            shell.Streams.Information.DataAdded += Information_DataAdded;
+
+            var results = await shell.InvokeAsync().ConfigureAwait(false);
+
+            if (results.Count > 0)
+            {
+                var builder = new StringBuilder();
+
+                foreach (var psObject in results)
+                {
+                    builder.AppendLine(psObject.BaseObject.ToString());
+                }
+
+                Output += $@"<br /><span>{System.Web.HttpUtility.HtmlEncode(builder.ToString())}</span>";
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Output += $@"<br /><span class=""error"">{System.Web.HttpUtility.HtmlEncode(ex.Message)}</span>";
+        }
+        finally
+        {
+            Console.SetOut(previousOut);
+        }
+    }
+
+    private void Information_DataAdded(object sender, DataAddedEventArgs e)
+    {
+        var streamObjectsReceived = sender as PSDataCollection<InformationRecord>;
+        var currentStreamRecord = streamObjectsReceived[e.Index];
+
+        //Output += currentStreamRecord.MessageData.ToString();
+        Output += $@"<br /><span class=""info"">{System.Web.HttpUtility.HtmlEncode(currentStreamRecord.MessageData.ToString())}</span>";
+    }
+
+    private void Warning_DataAdded(object sender, DataAddedEventArgs e)
+    {
+        var streamObjectsReceived = sender as PSDataCollection<WarningRecord>;
+        var currentStreamRecord = streamObjectsReceived[e.Index];
+
+        //Output += currentStreamRecord.Message;
+        Output += $@"<br /><span class=""info"">{System.Web.HttpUtility.HtmlEncode(currentStreamRecord.Message)}</span>";
+    }
+
+    private void Error_DataAdded(object sender, DataAddedEventArgs e)
+    {
+        var streamObjectsReceived = sender as PSDataCollection<ErrorRecord>;
+        var currentStreamRecord = streamObjectsReceived[e.Index];
+
+        //Output += currentStreamRecord.Exception.Message;
+        Output += $@"<br /><span class=""error"">{System.Web.HttpUtility.HtmlEncode(currentStreamRecord.Exception.Message)}</span>";
+    }
+}
