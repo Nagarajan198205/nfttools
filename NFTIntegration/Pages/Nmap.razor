@@ -13,7 +13,7 @@
         <div id="output-outer"><div id="output">@((MarkupString)Output)</div></div>
         <div id="blank-line">&nbsp;</div>
         <div id="input-row">
-            <span>&gt;&nbsp;</span><input id="input" autocomplete="off" @bind="Input" type="text" @onkeydown="OnKeyDown" @onkeyup="Run" autofocus />
+            <span>&gt;&nbsp;</span><input id="input" class=@processStyle autocomplete="off" @bind="Input" type="text" @onkeydown="OnKeyDown" @onkeyup="Run" autofocus />
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
     public string Output { get; set; } = string.Empty;
     public string Input { get; set; } = string.Empty;
     public bool IsFirstTimeExecution { get; set; } = false;
-
+    public string processStyle { get; set; }
 
     private object[] _submissionStates = new object[] { null, null };
     private int _submissionIndex = 0;
@@ -66,11 +66,17 @@
         _historyIndex = _history.Count;
         Input = "";
 
+        processStyle = "cursor-progress";
+
         await RunSubmission(code);
+
+        processStyle = "cursor-default";
     }
 
     private async Task RunSubmission(string cmdWithArgs)
     {
+
+
         Output += $@"<br /><span class=""info"">{System.Web.HttpUtility.HtmlEncode(cmdWithArgs)}</span>";
 
         var previousOut = Console.Out;
@@ -89,16 +95,15 @@
 
             var shell = System.Management.Automation.PowerShell.Create();
 
-            if (!IsFirstTimeExecution)
+            if (cmdWithArgs.Contains("nmap"))
             {
-
-                shell.Commands.AddScript(@"cd Tools\nmap");
-                await shell.InvokeAsync().ConfigureAwait(false);
-
-                IsFirstTimeExecution = true;
+                var currentDir = $"{System.IO.Directory.GetCurrentDirectory()}\\Tools\\nmap\\";
+                shell.Commands.AddScript($"{currentDir}{cmdWithArgs}");
             }
-
-            shell.Commands.AddScript(cmdWithArgs);
+            else
+            {
+                shell.Commands.AddScript(cmdWithArgs);
+            }
 
             shell.Streams.Error.DataAdded += Error_DataAdded;
             shell.Streams.Warning.DataAdded += Warning_DataAdded;

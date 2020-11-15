@@ -256,3 +256,12 @@ app {
 .nav-link[data-toggle]:not(.collapsed):before {
     content: " ▴";
 }
+
+.cursor-default
+{
+    cursor:auto
+}
+
+.cursor-progress {
+    cursor: progress
+}
