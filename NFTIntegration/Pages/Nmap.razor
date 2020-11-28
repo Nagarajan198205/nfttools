@@ -31,8 +31,10 @@
     private List<string> _history = new List<string>();
     private int _historyIndex = 0;
 
+    
     public void OnKeyDown(KeyboardEventArgs e)
-    {
+    { 
+
         if (e.Key == "ArrowUp" && _historyIndex > 0)
         {
             _historyIndex--;

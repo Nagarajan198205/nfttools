@@ -1,0 +1,31 @@
+﻿@page "/Zap"
+@inject NavigationManager navigationManager
+@using Model
+
+<h2>Zap!</h2>
+
+<EditForm Model="@zapModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Url:
+            <InputText @bind-Value="zapModel.Url" />
+        </label>
+    </p>
+  
+
+    <button type="submit">Submit</button>
+
+
+</EditForm>
+
+@code {
+    private ZapModel zapModel = new ZapModel();
+
+    private void HandleValidSubmit()
+    {
+
+    }
+}

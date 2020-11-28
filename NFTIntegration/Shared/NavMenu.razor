@@ -29,7 +29,7 @@
             }
         </li>
 
-        <li class="nav-item px-3">
+        @*<li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu2= !expandSubMenu2">
                 <span class="oi oi-globe" aria-hidden="true"></span>Web Application Analysis
             </NavLink>
@@ -49,7 +49,7 @@
                     </li>
                 </ul>
             }
-        </li>
+        </li>*@
 
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu3= !expandSubMenu3">
@@ -57,22 +57,17 @@
             </NavLink>
             @if (expandSubMenu3)
             {
-                <ul class="nav flex-column">
+                <ul class="nav flex-column">                   
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="waptit">
-                            <span class="oi oi-fire" aria-hidden="true"></span>waptit
-                        </NavLink>
-                    </li>
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="cadaver">
-                            <span class="oi oi-camera-slr" aria-hidden="true"></span>cadaver
+                        <NavLink class="nav-link" href="zap">
+                            <span class="oi oi-camera-slr" aria-hidden="true"></span>zap
                         </NavLink>
                     </li>
                 </ul>
             }
         </li>
 
-        <li class="nav-item px-3">
+        @*<li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu4= !expandSubMenu4">
                 <span class="oi oi-tag" aria-hidden="true"></span>Password Attacks
             </NavLink>
@@ -86,7 +81,7 @@
                     </li>
                 </ul>
             }
-        </li>
+        </li>*@
     </ul>
 </div>
 

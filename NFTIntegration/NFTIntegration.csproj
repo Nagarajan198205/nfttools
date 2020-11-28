@@ -5,12 +5,50 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazored.Menu" Version="2.0.5" />
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_14_1bmhzww_dcvdhj.png" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_15_1bmhzww_1pa6cgr.png" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_16_1bmhzww_16vgtkw.png" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_17_1bmhzww_6twyc5.png" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_18_1bmhzww.txt" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_19_1bmhzww_18mu4rr.ico" />
+    <Content Include="Tools\zap\.install4j\i4j_extf_20_1bmhzww_1gk1b9c.png" />
+    <Content Include="Tools\zap\.install4j\installer.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tools\" />
+    <PackageReference Include="Blazored.Menu" Version="2.0.5" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
+    <PackageReference Include="Mono.Terminal" Version="5.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Tools\zap\.install4j\autoUninstall.1" />
+    <None Include="Tools\zap\.install4j\files.log" />
+    <None Include="Tools\zap\.install4j\i4jdel.exe" />
+    <None Include="Tools\zap\.install4j\i4jinst.dll" />
+    <None Include="Tools\zap\.install4j\i4jparams.conf" />
+    <None Include="Tools\zap\.install4j\i4jruntime.jar" />
+    <None Include="Tools\zap\.install4j\i4j_extf_0_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_10_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_11_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_12_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_13_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_1_1bmhzww.properties" />
+    <None Include="Tools\zap\.install4j\i4j_extf_2_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_3_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_4_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_5_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_6_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_7_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_8_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\i4j_extf_9_1bmhzww.utf8" />
+    <None Include="Tools\zap\.install4j\install.prop" />
+    <None Include="Tools\zap\.install4j\installation.log" />
+    <None Include="Tools\zap\.install4j\inst_jre.cfg" />
+    <None Include="Tools\zap\.install4j\MessagesDefault" />
+    <None Include="Tools\zap\.install4j\response.varfile" />
+    <None Include="Tools\zap\.install4j\stats.properties" />
+    <None Include="Tools\zap\.install4j\user.jar" />
   </ItemGroup>
 
 </Project>

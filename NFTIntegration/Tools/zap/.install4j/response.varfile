@@ -1,0 +1,18 @@
+# install4j response file for OWASP Zed Attack Proxy 2.9.0
+cfu.checkAddOnUpdates$Boolean=true
+cfu.checkForUpdates$Boolean=true
+cfu.downloadNewRelease$Boolean=false
+cfu.installAddonUpdates$Boolean=true
+cfu.installScannerRules$Boolean=true
+cfu.reportAlphaAddons$Boolean=true
+cfu.reportBetaAddons$Boolean=true
+cfu.reportReleaseAddons$Boolean=true
+createDesktopLinkAction$Boolean=true
+createQuicklaunchIconAction$Boolean=false
+installationType$Integer=1
+sys.adminRights$Boolean=true
+sys.installationDir=C\:\\Program Files\\OWASP\\Zed Attack Proxy
+sys.languageId=en
+sys.programGroupAllUsers$Boolean=true
+sys.programGroupDisabled$Boolean=false
+sys.programGroupName=OWASP\\Zed Attack Proxy
