@@ -19,6 +19,7 @@
     <PackageReference Include="Blazored.Menu" Version="2.0.5" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
     <PackageReference Include="Mono.Terminal" Version="5.4.2" />
+    <PackageReference Include="OWASPZAPDotNetAPI" Version="2.8.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,16 @@
     <None Include="Tools\zap\.install4j\response.varfile" />
     <None Include="Tools\zap\.install4j\stats.properties" />
     <None Include="Tools\zap\.install4j\user.jar" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Reports\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Reports\report-02-Dec-2020-09-26-54.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -23,6 +23,8 @@ namespace NFTIntegration
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<ProcessInfo>();
+            services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

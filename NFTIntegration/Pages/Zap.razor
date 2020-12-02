@@ -1,31 +1,64 @@
 ﻿@page "/Zap"
 @inject NavigationManager navigationManager
 @using Model
+@using NFTIntegration.Data
 
 <h2>Zap!</h2>
 
 <EditForm Model="@zapModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
-    <p>
-        <label>
-            Url:
-            <InputText @bind-Value="zapModel.Url" />
-        </label>
-    </p>
-  
+    <div class="form-control-wrapper">
+        <label class="form-control-label" for="catalogue">Url</label>
+        <InputText class="form-control" id="catalogue" @bind-Value="zapModel.Url" />
+        <div class="form-control-validation">
+            <ValidationMessage For="@(() => zapModel.Url)" />
+        </div>
+    </div>
+    <div class="form-control-wrapper">
+        @if (IsScanning)
+        {
+            <button class="btn btn-primary m-1" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Scanning...
+            </button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary m-1">Scan</button>
+        }
+    </div>
 
-    <button type="submit">Submit</button>
-
+    @*@if (!string.IsNullOrEmpty(ReportFileName))
+        {*@
+    <div>
+        <iframe id="zapreport" src="../Reports/report-02-Dec-2020-09-26-54.html" frameborder="0">
+        </iframe>
+    </div>
+    @*}*@
 
 </EditForm>
 
 @code {
+
+    protected bool IsScanning { get; set; }
+    protected string ReportFileName { get; set; } = string.Empty;
+
     private ZapModel zapModel = new ZapModel();
 
-    private void HandleValidSubmit()
+    public async Task HandleValidSubmit()
     {
+        IsScanning = true;
+        StateHasChanged();
 
+        var zapClient = new ZAPClient();
+
+        //
+        await Task.Run(() => zapClient.Scan(zapModel.Url));
+
+        ReportFileName = $"{zapClient.ReportFileName}.html";
+
+        IsScanning = false;
+        StateHasChanged();
     }
 }
