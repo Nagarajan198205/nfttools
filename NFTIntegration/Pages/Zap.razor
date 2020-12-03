@@ -29,34 +29,35 @@
         }
     </div>
 
-    @*@if (!string.IsNullOrEmpty(ReportFileName))
-        {*@
-    <div>
-        <iframe id="zapreport" src="../Reports/report-02-Dec-2020-09-26-54.html" frameborder="0">
-        </iframe>
-    </div>
-    @*}*@
+    @if (!string.IsNullOrEmpty(ReportFileContent))
+    {
+        <div>
+            @((MarkupString)ReportFileContent)
+        </div>        
+    }
+
 
 </EditForm>
 
 @code {
 
     protected bool IsScanning { get; set; }
-    protected string ReportFileName { get; set; } = string.Empty;
+    protected string ReportFileContent { get; set; }
 
     private ZapModel zapModel = new ZapModel();
 
     public async Task HandleValidSubmit()
     {
+        ReportFileContent = string.Empty;
+
         IsScanning = true;
         StateHasChanged();
 
         var zapClient = new ZAPClient();
 
-        //
         await Task.Run(() => zapClient.Scan(zapModel.Url));
 
-        ReportFileName = $"{zapClient.ReportFileName}.html";
+        ReportFileContent = zapClient.ReportFileContent;
 
         IsScanning = false;
         StateHasChanged();

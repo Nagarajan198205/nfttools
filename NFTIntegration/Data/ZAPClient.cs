@@ -12,7 +12,8 @@ namespace NFTIntegration.Data
         private ClientApi _api = new ClientApi("localhost", 8090, _apikey);
         private IApiResponse _apiResponse;
         private string _target = string.Empty;
-        public string ReportFileName { get; set; }
+        private string ReportFileName { get; set; }
+        public string ReportFileContent { get; set; }
 
         public void Scan(string targetUrl)
         {
@@ -64,6 +65,8 @@ namespace NFTIntegration.Data
         private void WriteHtmlReport(string reportFileName)
         {
             File.WriteAllBytes(reportFileName + ".html", _api.core.htmlreport());
+
+            ReportFileContent = File.ReadAllText(reportFileName + ".html");
         }
 
         private void WriteXmlReport(string reportFileName)

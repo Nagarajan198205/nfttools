@@ -56,10 +56,4 @@
     <Folder Include="Reports\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Reports\report-02-Dec-2020-09-26-54.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
