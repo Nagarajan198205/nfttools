@@ -29,7 +29,7 @@ namespace NFTIntegration.Data
             string activeScanId = StartActiveScanning();
             PollTheActiveScannerTillCompletion(activeScanId);
 
-           // WriteXmlReport(ReportFileName);
+           //WriteXmlReport(ReportFileName);
             WriteHtmlReport(ReportFileName);
             PrintAlertsToConsole();
         }
@@ -149,10 +149,16 @@ namespace NFTIntegration.Data
 
         private string StartSpidering()
         {
-            Console.WriteLine("Spider: " + _target);
-            _apiResponse = _api.spider.scan(_target, "", "", "", "");
-            string scanid = ((ApiResponseElement)_apiResponse).Value;
-            return scanid;
+            try
+            {
+                Console.WriteLine("Spider: " + _target);
+                _apiResponse = _api.spider.scan(_target, "", "", "", "");
+                string scanid = ((ApiResponseElement)_apiResponse).Value;
+                return scanid;
+            }
+            catch {
+                return "0";
+            }            
         }
 
         private void LoadTargetUrlToSitesTree()
