@@ -21,24 +21,24 @@ namespace NFTIntegration.Data
             ReportFileName = $"{Directory.GetCurrentDirectory()}\\Reports\\report-{DateTime.Now:dd-MMM-yyyy-hh-mm-ss}";
 
             string spiderScanId = StartSpidering();
-            PollTheSpiderTillCompletion(spiderScanId);
+
+            if (!string.IsNullOrEmpty(spiderScanId))
+            {
+                PollTheSpiderTillCompletion(spiderScanId);
+            }
 
             StartAjaxSpidering();
             PollTheAjaxSpiderTillCompletion();
 
             string activeScanId = StartActiveScanning();
-            PollTheActiveScannerTillCompletion(activeScanId);
+            if (!string.IsNullOrEmpty(activeScanId))
+            {
+                PollTheActiveScannerTillCompletion(activeScanId);
+            }
 
-           //WriteXmlReport(ReportFileName);
+            //WriteXmlReport(ReportFileName);
             WriteHtmlReport(ReportFileName);
             PrintAlertsToConsole();
-        }
-
-        private void ShutdownZAP()
-        {
-            _apiResponse = _api.core.shutdown();
-            if ("OK" == ((ApiResponseElement)_apiResponse).Value)
-                Console.WriteLine("ZAP shutdown success " + _target);
         }
 
         private void PrintAlertsToConsole()
@@ -89,11 +89,18 @@ namespace NFTIntegration.Data
 
         private string StartActiveScanning()
         {
-            Console.WriteLine("Active Scanner: " + _target);
-            _apiResponse = _api.ascan.scan(_target, "", "", "", "", "", "");
+            try
+            {
+                Console.WriteLine("Active Scanner: " + _target);
+                _apiResponse = _api.ascan.scan(_target, "", "", "", "", "", "");
 
-            string activeScanId = ((ApiResponseElement)_apiResponse).Value;
-            return activeScanId;
+                string activeScanId = ((ApiResponseElement)_apiResponse).Value;
+                return activeScanId;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
         }
 
         private void PollTheAjaxSpiderTillCompletion()
@@ -156,9 +163,10 @@ namespace NFTIntegration.Data
                 string scanid = ((ApiResponseElement)_apiResponse).Value;
                 return scanid;
             }
-            catch {
-                return "0";
-            }            
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private void LoadTargetUrlToSitesTree()
