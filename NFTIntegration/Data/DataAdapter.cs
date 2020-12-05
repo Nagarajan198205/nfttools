@@ -26,6 +26,8 @@ namespace NFTIntegration.Data
                     CommandType = CommandType.Text
                 };
 
+                OpenConnection(sqliteConnection);
+
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -42,7 +44,8 @@ namespace NFTIntegration.Data
                     });
                 }
 
-            }
+                CloseConnection(sqliteConnection);
+            }           
 
             return reportDataList;
         }
@@ -58,7 +61,10 @@ namespace NFTIntegration.Data
                     CommandType = CommandType.Text
                 };
 
+                OpenConnection(sqliteConnection);
+
                 var reader = command.ExecuteReader();
+
 
                 while (reader.Read())
                 {
@@ -70,6 +76,36 @@ namespace NFTIntegration.Data
                     reportDetails.ReportFileName = reader.GetString("ReportFileName");
                     reportDetails.RunDate = reader.GetString("RunDate");
                 }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return reportDetails;
+        }
+
+
+
+        public ReportData GetLastRunZapReport()
+        {
+            var reportDetails = new ReportData();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT ReportFileName FROM ZapReports ORDER BY ReportId DESC LIMIT 1", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    reportDetails.ReportFileName = reader.GetString("ReportFileName");
+                }
+
+                CloseConnection(sqliteConnection);
             }
 
             return reportDetails;
