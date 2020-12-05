@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NFTIntegration.Data
 {
@@ -12,13 +13,22 @@ namespace NFTIntegration.Data
         private ClientApi _api = new ClientApi("localhost", 8090, _apikey);
         private IApiResponse _apiResponse;
         private string _target = string.Empty;
-        private string ReportFileName { get; set; }
+        private string _reportFilePath;
+        private string _reportFileName;
+        private string _runDate;
+        private DateTime _dtRunDate;
         public string ReportFileContent { get; set; }
+
 
         public void Scan(string targetUrl)
         {
             _target = targetUrl;
-            ReportFileName = $"{Directory.GetCurrentDirectory()}\\Reports\\report-{DateTime.Now:dd-MMM-yyyy-hh-mm-ss}";
+
+            _dtRunDate = DateTime.Now;
+
+            _runDate = _dtRunDate.ToString("dd-MMM-yyyy hh:mm:ss");
+            _reportFileName = $"zapreport-{_dtRunDate:dd-MMM-yyyy-hh-mm-ss}.html";
+            _reportFilePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{_reportFileName}";
 
             string spiderScanId = StartSpidering();
 
@@ -36,37 +46,41 @@ namespace NFTIntegration.Data
                 PollTheActiveScannerTillCompletion(activeScanId);
             }
 
-            //WriteXmlReport(ReportFileName);
-            WriteHtmlReport(ReportFileName);
-            PrintAlertsToConsole();
+            WriteHtmlReport(_reportFilePath);
+            SaveAlertDetails();
         }
 
-        private void PrintAlertsToConsole()
+        private void SaveAlertDetails()
         {
             List<Alert> alerts = _api.GetAlerts(_target, 0, 0, string.Empty);
-            foreach (var alert in alerts)
+
+            if (alerts.Count > 0)
             {
-                Console.WriteLine(alert.AlertMessage
-                    + Environment.NewLine
-                    + alert.CWEId
-                    + Environment.NewLine
-                    + alert.Url
-                    + Environment.NewLine
-                    + alert.WASCId
-                    + Environment.NewLine
-                    + alert.Evidence
-                    + Environment.NewLine
-                    + alert.Parameter
-                    + Environment.NewLine
-                );
+                var low = alerts.Where(x => x.Risk == Alert.RiskLevel.Low).GroupBy(x => x.AlertMessage).Count();
+                var medium = alerts.Where(x => x.Risk == Alert.RiskLevel.Medium).GroupBy(x => x.AlertMessage).Count();
+                var high = alerts.Where(x => x.Risk == Alert.RiskLevel.High).GroupBy(x => x.AlertMessage).Count();
+                var informational = alerts.Where(x => x.Risk == Alert.RiskLevel.Informational).GroupBy(x => x.AlertMessage).Count();
+
+                var reportId = Convert.ToInt64(_dtRunDate.ToString("yyyyMMddHHmmss"));
+
+                new DataAdapter().AddReportDetails(new ReportData
+                {
+                    ReportId = reportId,
+                    RunDate = _runDate,
+                    ReportFileName = _reportFileName,
+                    High = high,
+                    Medium = medium,
+                    Low = low,
+                    Information = informational
+                });
             }
         }
 
-        private void WriteHtmlReport(string reportFileName)
+        private void WriteHtmlReport(string reportFilePath)
         {
-            File.WriteAllBytes(reportFileName + ".html", _api.core.htmlreport());
+            File.WriteAllBytes(reportFilePath, _api.core.htmlreport());
 
-            ReportFileContent = File.ReadAllText(reportFileName + ".html");
+            ReportFileContent = File.ReadAllText(reportFilePath);
         }
 
         private void WriteXmlReport(string reportFileName)

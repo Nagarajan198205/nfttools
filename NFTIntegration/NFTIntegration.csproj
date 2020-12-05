@@ -17,9 +17,11 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.Menu" Version="2.0.5" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.0" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
     <PackageReference Include="Mono.Terminal" Version="5.4.2" />
     <PackageReference Include="OWASPZAPDotNetAPI" Version="2.8.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
