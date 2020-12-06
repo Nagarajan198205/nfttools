@@ -22,6 +22,7 @@ namespace NFTIntegration.Data
 
         public void Scan(string targetUrl)
         {
+          
             _target = targetUrl;
 
             _dtRunDate = DateTime.Now;
@@ -61,7 +62,7 @@ namespace NFTIntegration.Data
                 var high = alerts.Where(x => x.Risk == Alert.RiskLevel.High).GroupBy(x => x.AlertMessage).Count();
                 var informational = alerts.Where(x => x.Risk == Alert.RiskLevel.Informational).GroupBy(x => x.AlertMessage).Count();
 
-                var reportId = Convert.ToInt64(_dtRunDate.ToString("yyyyMMddHHmmss"));
+                var reportId = Convert.ToInt64(_dtRunDate.ToString("yyyyMMddhhmmss"));
 
                 new DataAdapter().AddReportDetails(new ReportData
                 {
