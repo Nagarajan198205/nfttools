@@ -4,6 +4,7 @@ using NFTIntegration.Data;
 using NFTIntegration.Model;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NFTIntegration.Classes
@@ -22,37 +23,38 @@ namespace NFTIntegration.Classes
         }
 
         protected override async Task OnInitializedAsync()
-        { 
-            await Task.Run(InitalizeZapTool); 
+        {
+            //await Task.WhenAll(InitalizeZapTool, GetLatestRunReport);
+            await Task.Run(() => Parallel.Invoke(() => InitalizeZapTool(), () => GetLatestRunReport()));
         }
 
-        private async Task InitalizeZapTool()
+        private void InitalizeZapTool()
         {
             var sessionPath = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["SessionPath"];
             var executableFile = $"{System.IO.Directory.GetCurrentDirectory()}\\Tools\\zap\\zap.bat";
-            var attributes = $"-cmd -quickprogress -newsession {sessionPath}_{DateTime.Now:ddMMyyyyHHmmss}";
+            var attributes = $"-daemon -newsession {sessionPath}_{DateTime.Now:ddMMyyyyHHmmss}";
 
-            var processInfo = new ProcessStartInfo(executableFile, attributes);
-            processInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            var processList = Process.GetProcessesByName("java");
 
-            var runningProcessByName = Process.GetProcessesByName("iexplore");
-            if (runningProcessByName.Length == 0)
+            if (processList.Length == 0)
             {
-                var shell = System.Management.Automation.PowerShell.Create();
-                var currentDir = $"{System.IO.Directory.GetCurrentDirectory()}\\Tools\\zap\\";
-                var driveLabel = currentDir.Substring(0, currentDir.IndexOf(":")+1);
 
-                shell.Commands.AddScript(driveLabel);
-                await shell.InvokeAsync().ConfigureAwait(true);
+                using var process = new Process();
+                process.StartInfo.FileName = executableFile;
+                process.StartInfo.Arguments = attributes;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
 
-                shell.Commands.AddScript($"{currentDir}zap.bat {attributes}");
-
-                await shell.InvokeAsync().ConfigureAwait(true);
+                System.Threading.Thread.Sleep(10000);
             }
 
-            System.Threading.Thread.Sleep(10000);
-
             ZapModel = new ZapModel();
+        }
+
+        private void GetLatestRunReport()
+        {
+            var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
+            ReportFileContent = File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
         }
 
         public async Task HandleValidSubmit()
