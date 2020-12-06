@@ -53,8 +53,13 @@ namespace NFTIntegration.Classes
 
         private void GetLatestRunReport()
         {
-            var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
+            var reportFileName = new DataAdapter().GetLastRunZapReport()[0].ReportFileName;
             ReportFileContent = File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
+        }
+
+        public void GetHTMLReport(string reportFileNamePath)
+        {
+            ReportFileContent = File.ReadAllText(reportFileNamePath);
         }
 
         public async Task HandleValidSubmit()

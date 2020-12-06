@@ -1,6 +1,7 @@
 ﻿@page "/ZAPReports"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
+@inherits Classes.ZapBase
 
 @using Data;
 @using System.IO;
@@ -54,7 +55,8 @@
                             <td>@item.Low</td>
                             <td>@item.Information</td>
                             <td>
-                                <a href=@string.Format(@"file:///{0}\Reports\{1}", Directory.GetCurrentDirectory(), @item.ReportFileName) target="_blank">View</a>
+                                <!--<a href=@string.Format(@"file:///{0}\Reports\{1}", Directory.GetCurrentDirectory(), @item.ReportFileName) target="_blank">View</a>-->
+                                <a href="/ZapReports" @onclick="@(() => NavigateToUrl($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{@item.ReportFileName}"))">View</a>
                             </td>
                         </tr>
                     }
@@ -103,8 +105,16 @@ else
         }
     }
 
-    public async Task NavigateToUrl(string url)
+    public async void NavigateToUrl(string filePath)
     {
-        navigationManager.NavigateTo(url);
+        GetHTMLReport(filePath);
+        // navigationManager.NavigateTo("/ViewZapReport");
+        string url = "/ViewZapReport";
+        await NavigateToNewTab(url);
+    }
+
+    public async Task NavigateToNewTab(string url)
+    {
+        await jsRunTime.InvokeAsync<object>("open", url, "_blank");
     }
 }

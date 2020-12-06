@@ -14,7 +14,7 @@ namespace NFTIntegration.Data
         {
             var zapAlerts = new List<ZapAlerts>();
 
-            var recentAlert = new DataAdapter().GetRecentZapReport();
+            var recentAlert = new DataAdapter().GetLastRunZapReport();
 
             zapAlerts.Add(new ZapAlerts() { Risk = "High", Alerts = recentAlert[0].High });
             zapAlerts.Add(new ZapAlerts() { Risk = "Medium", Alerts = recentAlert[0].Medium });
