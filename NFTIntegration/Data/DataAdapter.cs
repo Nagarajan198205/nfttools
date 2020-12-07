@@ -51,9 +51,9 @@ namespace NFTIntegration.Data
             return reportDataList;
         }
 
-        public List<ReportData> GetLastRunZapReport()
+        public ReportData GetLastRunZapReport()
         {
-            var reportDataList = new List<ReportData>();
+            var reportData = new ReportData();
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
@@ -66,25 +66,21 @@ namespace NFTIntegration.Data
 
                 var reader = command.ExecuteReader();
 
-                while (reader.Read())
+                if (reader.Read())
                 {
-                    reportDataList.Add(new ReportData
-                    {
-                        ReportId = reader.GetInt64("ReportId"),
-                        High = reader.GetInt32("High"),
-                        Medium = reader.GetInt32("Medium"),
-                        Low = reader.GetInt32("Low"),
-                        Information = reader.GetInt32("Information"),
-                        ReportFileName = reader.GetString("ReportFileName"),
-                        RunDate = reader.GetString("RunDate")
-                    });
+                    reportData.ReportId = reader.GetInt64("ReportId");
+                    reportData.High = reader.GetInt32("High");
+                    reportData.Medium = reader.GetInt32("Medium");
+                    reportData.Low = reader.GetInt32("Low");
+                    reportData.Information = reader.GetInt32("Information");
+                    reportData.ReportFileName = reader.GetString("ReportFileName");
+                    reportData.RunDate = reader.GetString("RunDate");
                 }
 
                 CloseConnection(sqliteConnection);
-
             }
 
-            return reportDataList;
+            return reportData;
         }
 
         public ReportData GetZapReportDetails(string reportId)
