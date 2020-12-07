@@ -1,11 +1,115 @@
-﻿@layout MainLayout
-@page "/ZapReports"
+﻿@page "/ZAPReports"
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRunTime
+@inherits Classes.ZapBase
 
-<head>
-    <link href="_content/Blazored.Menu/blazored-menu.css" rel="stylesheet" />
-</head>
-<h2>ZAP Reports!</h2>
+@using Data;
+@using System.IO;
 
-<div>
-    
-</div>
+<h2>ZAP Reports</h2>
+<h3>Recent ZAP Report Summary</h3>
+<div id="chartdiv"></div>
+
+
+@if (zapReportData.Count != 0)
+{
+    <div class="row">
+        @if (Collapsed)
+        {
+            <div @onclick="@Toggle" class="oi oi-plus result-title">
+                <span class="result-title-text">Click here for detailed report and report history</span>
+            </div>
+        }
+        else
+        {
+            <div @onclick="@Toggle" class="oi oi-minus result-title">
+                <span class="result-title-text">Report History</span>
+            </div>
+        }
+        @Title
+    </div>
+
+    @if (!Collapsed)
+    {
+        <div class="table-responsive-xl">
+            <table class="table table-bordered table-striped mb-0">
+                <thead class="bg-info">
+                    <tr>
+                        <th scope="col" class="col-header">Run Date</th>
+                        <th scope="col" class="risk-high">High</th>
+                        <th scope="col" class="risk-medium">Medium</th>
+                        <th scope="col" class="risk-low">Low</th>
+                        <th scope="col" class="risk-info">Information</th>
+                        <th scope="col" class="col-header">View Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in zapReportData)
+                    {
+                        <tr>
+                            <th>@item.RunDate</th>
+                            <td>@item.High</td>
+                            <td>@item.Medium</td>
+                            <td>@item.Low</td>
+                            <td>@item.Information</td>
+                            <td>
+                                <a href="/ZapReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <h3>No reports available!</h3>
+}
+
+
+@code{
+
+    [Parameter]
+    public bool Collapsed { get; set; } = true;
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public List<ReportData> zapReportData { get; set; } = new DataAdapter().GetZapReportList();
+
+    void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+
+    ZapAlerts zapAlert = new ZapAlerts();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var zapAlerts = zapAlert.GetZapAlerts();
+                await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+        }
+    }
+
+    public async void NavigateToUrl(ReportData reportData)
+    {
+        string url = $"/ViewZapReport?zapid={reportData.ReportId}";
+        await NavigateToNewTab(url);
+    }
+
+    public async Task NavigateToNewTab(string url)
+    {
+        await jsRunTime.InvokeAsync<object>("open", url, "_blank");
+    }
+}

@@ -1,0 +1,77 @@
+﻿@page "/ViewZapReport"
+@inject NavigationManager navigationManager
+@inherits Classes.ZapBase
+@inject IJSRuntime jsRunTime
+
+@using Data;
+@using Microsoft.AspNetCore.WebUtilities;
+
+<h1>Zap Scanning Report</h1>
+<h3>Summary of Alerts</h3>
+<div id="chartdiv"></div>
+<div class="row">
+    @if (Collapsed)
+    {
+        <div @onclick="@Toggle" class="oi oi-plus result-title">
+            <span class="result-title-text">Click here for alert details</span>
+        </div>
+    }
+    else
+    {
+        <div @onclick="@Toggle" class="oi oi-minus result-title">
+            <span class="result-title-text">Alert Details</span>
+        </div>
+    }
+    @Title
+</div>
+
+@if (!Collapsed)
+{
+    @((MarkupString)htmlMarkup)
+}
+
+@code{
+
+    [Parameter]
+    public bool Collapsed { get; set; } = true;
+    [Parameter]
+    public string Title { get; set; }
+    public string ZapID { get; set; }
+    [Parameter]
+    public string htmlMarkup { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("zapid", out var _zapid))
+        {
+            ZapID = _zapid;
+            htmlMarkup = GetRawZapHTMLReport(_zapid);
+        }
+    }
+
+
+    void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+
+    ZapAlerts zapAlert = new ZapAlerts();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var zapAlerts = zapAlert.GetZapAlerts(ZapID);
+                await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+        }
+    }
+
+}

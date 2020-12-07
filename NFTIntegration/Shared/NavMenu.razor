@@ -16,6 +16,11 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Dashboard">
+                <span class="oi oi-dashboard" aria-hidden="true"></span>Dashboard
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu1= !expandSubMenu1">
                 <span class="oi oi-book" aria-hidden="true"></span>Information Gathering
             </NavLink>
@@ -62,7 +67,7 @@
                     </li>
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="zapreports">
-                            <span class="oi oi-globe" aria-hidden="true"></span>Zap
+                            <span class="oi oi-globe" aria-hidden="true"></span>ZAP
                         </NavLink>
                     </li>
                 </ul>
@@ -84,5 +89,6 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
 }
 
