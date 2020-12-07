@@ -31,21 +31,20 @@ namespace NFTIntegration.Classes
         private void InitalizeZapTool()
         {
             var sessionPath = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["SessionPath"];
-            var executableFile = $"{System.IO.Directory.GetCurrentDirectory()}\\Tools\\zap\\zap.bat";
             var attributes = $"-daemon -newsession {sessionPath}_{DateTime.Now:ddMMyyyyHHmmss}";
-
             var processList = Process.GetProcessesByName("java");
 
             if (processList.Length == 0)
             {
+                var shell = System.Management.Automation.PowerShell.Create();
+                var currentDir = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\";
+                var driveLabel = currentDir.Substring(0, currentDir.IndexOf(":") + 1);
 
-                using var process = new Process();
-                process.StartInfo.FileName = executableFile;
-                process.StartInfo.Arguments = attributes;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
+                shell.Commands.AddScript(driveLabel);
+                shell.Commands.AddScript($"cd {currentDir}");
+                shell.Commands.AddScript($"zap.bat {attributes}");
 
-                System.Threading.Thread.Sleep(10000);
+                shell.Invoke();                 
             }
 
             ZapModel = new ZapModel();
@@ -54,7 +53,7 @@ namespace NFTIntegration.Classes
         private void GetLatestRunReport()
         {
             var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
-            ReportFileContent = File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
+            ReportFileContent = File.ReadAllText($"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
         }
 
         public async Task HandleValidSubmit()
