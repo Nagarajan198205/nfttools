@@ -57,9 +57,42 @@ namespace NFTIntegration.Classes
             ReportFileContent = File.ReadAllText($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
         }
 
-        public void GetHTMLReport(string reportFileNamePath)
+        public string GetRawZapHTMLReport(string reportID)
         {
-            ReportFileContent = File.ReadAllText(reportFileNamePath);
+            var reportFileName = new DataAdapter().GetZapReportDetails(reportID);
+
+            var htmlText = "";
+
+            var borderLine = "<tr valign=\"top\">"
+                             + "   <td colspan=\"2\"></td>"
+                             + "</tr >";
+
+            using (StreamReader sr = new StreamReader($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName.ReportFileName}"))
+            {
+                String line;
+                Boolean tablesFound = false;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.Contains("class=\"results\"") || tablesFound)
+                    {
+                        tablesFound = true;
+
+                        if (line.Contains("</body>"))
+                        {
+                            break;
+                        }
+
+                        var htmlLine = line.Contains("</tr>")
+                            ? line.ToString() + Environment.NewLine + borderLine
+                            : line.ToString();
+
+                        htmlText = htmlText == ""
+                            ? htmlLine
+                            : htmlText + Environment.NewLine + htmlLine;
+                    }
+                }
+            }
+            return htmlText;
         }
 
         public async Task HandleValidSubmit()

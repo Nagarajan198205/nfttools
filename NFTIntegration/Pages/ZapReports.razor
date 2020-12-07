@@ -8,9 +8,7 @@
 
 <h2>ZAP Reports</h2>
 <h3>Recent ZAP Report Summary</h3>
-<div class="container" style="width: 500px;">
-    <div id="chartdiv"></div>
-</div>
+<div id="chartdiv"></div>
 
 
 @if (zapReportData.Count != 0)
@@ -55,8 +53,7 @@
                             <td>@item.Low</td>
                             <td>@item.Information</td>
                             <td>
-                                <!--<a href=@string.Format(@"file:///{0}\Reports\{1}", Directory.GetCurrentDirectory(), @item.ReportFileName) target="_blank">View</a>-->
-                                <a href="/ZapReports" @onclick="@(() => NavigateToUrl($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{@item.ReportFileName}"))">View</a>
+                                <a href="/ZapReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
                             </td>
                         </tr>
                     }
@@ -95,7 +92,7 @@ else
         {
             try
             {
-                var zapAlerts = zapAlert.getZapAlerts();
+                var zapAlerts = zapAlert.GetZapAlerts();
                 await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
             }
             catch (Exception e)
@@ -105,11 +102,9 @@ else
         }
     }
 
-    public async void NavigateToUrl(string filePath)
+    public async void NavigateToUrl(ReportData reportData)
     {
-        GetHTMLReport(filePath);
-        // navigationManager.NavigateTo("/ViewZapReport");
-        string url = "/ViewZapReport";
+        string url = $"/ViewZapReport?zapid={reportData.ReportId}";
         await NavigateToNewTab(url);
     }
 

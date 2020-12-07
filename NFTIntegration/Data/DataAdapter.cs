@@ -87,13 +87,13 @@ namespace NFTIntegration.Data
             return reportDataList;
         }
 
-        public ReportData GetZapReportDetails(int reportId)
+        public ReportData GetZapReportDetails(string reportId)
         {
             var reportDetails = new ReportData();
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"SELECT ReportId,ReportFileName,RunDate FROM ZapReports WHERE ReportId = {reportId}", sqliteConnection)
+                var command = new SqliteCommand($"SELECT ReportId,High,Medium,Low,Information,ReportFileName,RunDate FROM ZapReports WHERE ReportId={reportId}", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };

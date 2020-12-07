@@ -1,0 +1,33 @@
+﻿@page "/Dashboard"
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRunTime
+@inherits Classes.ZapBase
+
+@using Data;
+
+
+<h2>Dashboard</h2>
+<h3>ZAP Report Summary</h3>
+<div id="chartdiv" style="height: 500px;"></div>
+
+@code{
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        ZapAlerts zapAlert = new ZapAlerts();
+
+        if (firstRender)
+        {
+            try
+            {
+                var zapAlerts = zapAlert.GetZapAlerts();
+                await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+        }
+    }
+
+}
