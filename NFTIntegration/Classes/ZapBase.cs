@@ -71,31 +71,37 @@ namespace NFTIntegration.Classes
                              + "   <td colspan=\"2\"></td>"
                              + "</tr >";
 
-            using (StreamReader sr = new StreamReader($"{System.IO.Directory.GetCurrentDirectory()}\\Reports\\{reportFileName.ReportFileName}"))
+            var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName.ReportFileName}";
+
+            if (File.Exists(filePath))
             {
-                String line;
-                Boolean tablesFound = false;
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(filePath))
                 {
-                    if (line.Contains("class=\"results\"") || tablesFound)
+                    String line;
+                    Boolean tablesFound = false;
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        tablesFound = true;
-
-                        if (line.Contains("</body>"))
+                        if (line.Contains("class=\"results\"") || tablesFound)
                         {
-                            break;
+                            tablesFound = true;
+
+                            if (line.Contains("</body>"))
+                            {
+                                break;
+                            }
+
+                            var htmlLine = line.Contains("</tr>")
+                                ? line.ToString() + Environment.NewLine + borderLine
+                                : line.ToString();
+
+                            htmlText = htmlText == ""
+                                ? htmlLine
+                                : htmlText + Environment.NewLine + htmlLine;
                         }
-
-                        var htmlLine = line.Contains("</tr>")
-                            ? line.ToString() + Environment.NewLine + borderLine
-                            : line.ToString();
-
-                        htmlText = htmlText == ""
-                            ? htmlLine
-                            : htmlText + Environment.NewLine + htmlLine;
                     }
                 }
             }
+
             return htmlText;
         }
 
@@ -114,6 +120,6 @@ namespace NFTIntegration.Classes
 
             IsScanning = false;
             StateHasChanged();
-        }         
+        }
     }
 }

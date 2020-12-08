@@ -6,45 +6,4 @@
     <link href="_content/Blazored.Menu/blazored-menu.css" rel="stylesheet" />
 </head>
 
-<Home />
-
-@*<div>
-
-        <ul class="nav nav-tabs" role="tablist">
-            @foreach (var item in ComponentTypes)
-            {
-                if (ComponentTypes.IndexOf(item) == Selected)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link active" href="javascript:;">@item.Name</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:;" @onclick="()=>Selected = ComponentTypes.IndexOf(item)">@item.Name</a>
-                    </li>
-                }
-            }
-        </ul>
-
-        <div class="tab-content">
-            @foreach (var item in ComponentTypes)
-            {
-                if (ComponentTypes.IndexOf(item) == Selected)
-                {
-                    <div id="@item.Name" class="container active">
-                    </div>
-                }
-                else
-                {
-                    <div id="home" class="container fade">
-                    </div>
-                }
-            }
-
-        </div>
-
-    </div>
-
-    @GetRenderFragment(ComponentTypes[Selected])*@
+<Dashboard />

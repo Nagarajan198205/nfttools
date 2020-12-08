@@ -22,7 +22,7 @@ namespace NFTIntegration.Classes
             return renderFragment;
         }
 
-        public List<ComponentBase> PageComponents = new List<ComponentBase> { new Home() };
+        public List<ComponentBase> PageComponents = new List<ComponentBase> { new About() };
 
         public List<Type> ComponentTypes => PageComponents.Select(t => t.GetType()).ToList();
 
@@ -36,10 +36,10 @@ namespace NFTIntegration.Classes
 
                 switch (tabName.ToUpper())
                 {
-                    case "HOME":
-                        var home = new Home();
-                        PageComponents.Add(home);
-                        type = home.GetType();
+                    case "ABOUT":
+                        var about = new About();
+                        PageComponents.Add(about);
+                        type = about.GetType();
                         break;
                     case "NMAP":
                         var nmap = new Nmap();
