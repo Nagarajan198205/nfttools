@@ -2,9 +2,12 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.ZapBase
-
+@using Classes
 @using Data;
 
+<div class="float-lg-right">
+    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
+</div>
 
 <h2>Dashboard</h2>
 <h3>ZAP Report Summary</h3>
@@ -30,4 +33,11 @@
         }
     }
 
+}
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"Dashboard_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+    }
 }

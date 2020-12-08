@@ -2,13 +2,19 @@
 @inject NavigationManager navigationManager
 @inherits Classes.ZapBase
 @inject IJSRuntime jsRunTime
-
+@using Classes
 @using Data;
 @using Microsoft.AspNetCore.WebUtilities;
 
+<div class="float-lg-right">
+    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
+</div>
+
 <h1>Zap Scanning Report</h1>
 <h3>Summary of Alerts</h3>
+
 <div id="chartdiv"></div>
+
 <div class="row">
     @if (Collapsed)
     {
@@ -74,4 +80,11 @@
         }
     }
 
+}
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"ZapReport_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+    }
 }

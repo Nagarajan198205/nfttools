@@ -1,7 +1,13 @@
 ﻿@page "/Nmap"
 @inject NavigationManager navigationManager
+@inject IJSRuntime jsRunTime
 @inherits Classes.NmapBase
- 
+@using Classes
+
+<div class="float-lg-right">
+    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
+</div>
+
 <div id="outer-screen">
     <div id="inner-screen">
         <div id="output-outer"><div id="output">@((MarkupString)Output)</div></div>
@@ -11,3 +17,11 @@
         </div>
     </div>
 </div>
+
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"Nmap_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+    }
+}

@@ -1,8 +1,14 @@
 ﻿@page "/Zap"
 @inject NavigationManager navigationManager
+@inject IJSRuntime jsRunTime
 @inherits Classes.ZapBase
- 
-@if (ZapModel==null)
+@using Classes
+
+<div class="float-lg-right">
+    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
+</div>
+
+@if (ZapModel == null)
 {
     <div class="spinner">
 
@@ -10,39 +16,46 @@
 }
 else
 {
-<div>
-    <EditForm Model="@ZapModel" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
+    <div>
+        <EditForm Model="@ZapModel" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
 
-        <div class="form-control-wrapper">
-            <label class="form-control-label" for="catalogue">Url</label>
-            <InputText class="form-control" id="catalogue" @bind-Value="ZapModel.Url" />
-            <div class="form-control-validation">
-                <ValidationMessage For="@(() => ZapModel.Url)" />
+            <div class="form-control-wrapper">
+                <label class="form-control-label" for="catalogue">Url</label>
+                <InputText class="form-control" id="catalogue" @bind-Value="ZapModel.Url" />
+                <div class="form-control-validation">
+                    <ValidationMessage For="@(() => ZapModel.Url)" />
+                </div>
             </div>
-        </div>
-        <div class="form-control-wrapper">
-            @if (IsScanning)
-            {
-                <button class="btn btn-primary m-1" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Scanning...
-                </button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary m-1">Scan</button>
-            }
-        </div>
-
-        @if (!string.IsNullOrEmpty(ReportFileContent))
-        {
-            <div>
-                @((MarkupString)ReportFileContent)
+            <div class="form-control-wrapper">
+                @if (IsScanning)
+                {
+                    <button class="btn btn-primary m-1" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Scanning...
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary m-1">Scan</button>
+                }
             </div>
-        }
 
-    </EditForm>
-  
-</div>
+            @if (!string.IsNullOrEmpty(ReportFileContent))
+            {
+                <div>
+                    @((MarkupString)ReportFileContent)
+                </div>
+            }
+
+        </EditForm>
+
+    </div>
+}
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"Zap_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+    }
 }

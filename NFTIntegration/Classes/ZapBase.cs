@@ -44,7 +44,7 @@ namespace NFTIntegration.Classes
                 shell.Commands.AddScript($"cd {currentDir}");
                 shell.Commands.AddScript($"zap.bat {attributes}");
 
-                shell.Invoke();                 
+                shell.Invoke();
             }
 
             ZapModel = new ZapModel();
@@ -53,7 +53,12 @@ namespace NFTIntegration.Classes
         private void GetLatestRunReport()
         {
             var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
-            ReportFileContent = File.ReadAllText($"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}");
+            var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}";
+
+            if (File.Exists(filePath))
+            {
+                ReportFileContent = File.ReadAllText(filePath);
+            }
         }
 
         public string GetRawZapHTMLReport(string reportID)
@@ -109,6 +114,6 @@ namespace NFTIntegration.Classes
 
             IsScanning = false;
             StateHasChanged();
-        }
+        }         
     }
 }

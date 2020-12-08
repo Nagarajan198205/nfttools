@@ -4,7 +4,11 @@
 @inherits Classes.ZapBase
 
 @using Data;
-@using System.IO;
+@using Classes
+
+<div class="float-lg-right">
+    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
+</div>
 
 <h2>ZAP Reports</h2>
 <h3>Recent ZAP Report Summary</h3>
@@ -111,5 +115,12 @@ else
     public async Task NavigateToNewTab(string url)
     {
         await jsRunTime.InvokeAsync<object>("open", url, "_blank");
+    }
+}
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"Zap_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }
