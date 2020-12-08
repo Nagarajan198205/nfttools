@@ -11,7 +11,7 @@
 
 <h2>Dashboard</h2>
 <div class="center">
-    <h3>Vulnerable Report Summary</h3>
+    <h3>Vulnerable report summary</h3>
 </div>
 <div id="chartdiv" style="height: 500px;"></div>
 
@@ -26,7 +26,7 @@
             try
             {
                 var zapAlerts = zapAlert.GetZapAlerts();
-                await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
+                await jsRunTime.InvokeVoidAsync("generateChartInPercentage", zapAlerts);
             }
             catch (Exception e)
             {

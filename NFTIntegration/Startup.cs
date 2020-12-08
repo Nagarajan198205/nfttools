@@ -39,8 +39,7 @@ namespace NFTIntegration
             //{
             //    app.UseExceptionHandler("/Error");
             //}
-
-            //app.UseExceptionHandler("/Error");
+             
             app.UseDeveloperExceptionPage();
             app.UseHsts();
             app.UseStaticFiles();

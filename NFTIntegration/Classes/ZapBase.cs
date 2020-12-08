@@ -58,6 +58,7 @@ namespace NFTIntegration.Classes
             if (File.Exists(filePath))
             {
                 ReportFileContent = File.ReadAllText(filePath);
+                ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
             }
         }
 

@@ -10,9 +10,9 @@
     <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
 </div>
 
-<h2 class="text-center">Vulnerable Reports</h2>
+<h2>Vulnerable reports</h2>
 <div class="center">
-    <h3>Recent Vulnerable Report Summary</h3>
+    <h3>Latest vulnerable report summary</h3>
 </div>
 <div id="chartdiv"></div>
 
@@ -99,7 +99,7 @@ else
             try
             {
                 var zapAlerts = zapAlert.GetZapAlerts();
-                await jsRunTime.InvokeVoidAsync("generateChart", zapAlerts);
+                await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
             }
             catch (Exception e)
             {

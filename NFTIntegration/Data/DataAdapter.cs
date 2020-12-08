@@ -137,8 +137,6 @@ namespace NFTIntegration.Data
 
         private void OpenConnection(SqliteConnection sqliteConnection)
         {
-            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_winsqlite3());
-
             if (sqliteConnection.State == ConnectionState.Closed)
             {
                 sqliteConnection.Open();
@@ -147,8 +145,6 @@ namespace NFTIntegration.Data
 
         private void CloseConnection(SqliteConnection sqliteConnection)
         {
-            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_winsqlite3());
-
             if (sqliteConnection.State == ConnectionState.Open)
             {
                 sqliteConnection.Close();

@@ -1,4 +1,5 @@
-﻿using OWASPZAPDotNetAPI;
+﻿using Microsoft.Extensions.Configuration;
+using OWASPZAPDotNetAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,9 +10,10 @@ namespace NFTIntegration.Data
     public class ZAPClient
     {
 
-        private static string _apikey = "u6gcd2d204ab86qt6mciducp4i";
-        private ClientApi _api = new ClientApi("localhost", 8090, _apikey);
+        private static string _apikey;
+        private ClientApi _api;
         private IApiResponse _apiResponse;
+        private string _port;
         private string _target = string.Empty;
         private string _reportFilePath;
         private string _reportFileName;
@@ -19,17 +21,30 @@ namespace NFTIntegration.Data
         private DateTime _dtRunDate;
         public string ReportFileContent { get; set; }
 
+        public ZAPClient()
+        {
+            _apikey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["APIToken"];
+            _port = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["APIRunningPort"];
+            _api = new ClientApi("localhost", Convert.ToInt32(_port), _apikey);
+        }
 
         public void Scan(string targetUrl)
         {
-          
+
             _target = targetUrl;
 
             _dtRunDate = DateTime.Now;
 
+            var repotDirectory = $"{Directory.GetCurrentDirectory()}\\Reports\\";
+
+            if (!Directory.Exists(repotDirectory))
+            {
+                Directory.CreateDirectory(repotDirectory);
+            }
+
             _runDate = _dtRunDate.ToString("dd-MMM-yyyy hh:mm:ss");
             _reportFileName = $"zapreport-{_dtRunDate:dd-MMM-yyyy-hh-mm-ss}.html";
-            _reportFilePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{_reportFileName}";
+            _reportFilePath = $"{repotDirectory}{_reportFileName}";
 
             string spiderScanId = StartSpidering();
 
@@ -80,8 +95,8 @@ namespace NFTIntegration.Data
         private void WriteHtmlReport(string reportFilePath)
         {
             File.WriteAllBytes(reportFilePath, _api.core.htmlreport());
-
             ReportFileContent = File.ReadAllText(reportFilePath);
+            ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
         }
 
         private void WriteXmlReport(string reportFileName)
@@ -178,8 +193,9 @@ namespace NFTIntegration.Data
                 string scanid = ((ApiResponseElement)_apiResponse).Value;
                 return scanid;
             }
-            catch
+            catch (Exception ex)
             {
+                var data = ex.Message;
                 return string.Empty;
             }
         }
