@@ -2,11 +2,15 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.ZapBase
-@using Classes
+@using Classes 
+@using NFTIntegration.Components 
+
 
 <div class="float-lg-right">
     <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
 </div>
+
+<AnchorNavigation/>
 
 @if (ZapModel == null)
 {

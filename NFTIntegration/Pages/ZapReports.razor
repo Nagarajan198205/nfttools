@@ -111,7 +111,7 @@ else
     public async void NavigateToUrl(ReportData reportData)
     {
         string url = $"/ViewZapReport?zapid={reportData.ReportId}";
-        await NavigateToNewTab(url);
+        await NavigateToNewTab(url).ConfigureAwait(false);
     }
 
     public async Task NavigateToNewTab(string url)

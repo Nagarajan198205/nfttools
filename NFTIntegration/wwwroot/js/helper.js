@@ -14,6 +14,7 @@ function downloadFromByteArray(options) {
     // At last, release unused resources.
     URL.revokeObjectURL(url);
 }
+
 function downloadFromUrl(options) {
     var _a;
     const anchorElement = document.createElement('a');
@@ -21,4 +22,15 @@ function downloadFromUrl(options) {
     anchorElement.download = (_a = options.fileName) !== null && _a !== void 0 ? _a : '';
     anchorElement.click();
     anchorElement.remove();
+}
+
+function BlazorScrollToId(name) {
+    const element = document.getElementsByName(name)[0];
+    if (element instanceof HTMLElement) {
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest"
+        });
+    }
 }

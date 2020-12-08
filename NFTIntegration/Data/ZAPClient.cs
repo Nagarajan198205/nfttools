@@ -94,9 +94,17 @@ namespace NFTIntegration.Data
 
         private void WriteHtmlReport(string reportFilePath)
         {
-            File.WriteAllBytes(reportFilePath, _api.core.htmlreport());
-            ReportFileContent = File.ReadAllText(reportFilePath);
-            ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
+            try
+            {
+                File.WriteAllBytes(reportFilePath, _api.core.htmlreport());
+                ReportFileContent = File.ReadAllText(reportFilePath);
+                ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
+            }
+            catch
+            {
+                //to do
+            }
+
         }
 
         private void WriteXmlReport(string reportFileName)
