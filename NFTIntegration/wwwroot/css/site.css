@@ -207,9 +207,10 @@ app {
     }
 
     .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
+        width: 300px;
+        height: 100vh; 
+        overflow: auto; 
+        position: relative;
         top: 0;
     }
 
@@ -257,9 +258,8 @@ app {
     content: " ▴";
 }
 
-.cursor-default
-{
-    cursor:auto
+.cursor-default {
+    cursor: auto
 }
 
 .cursor-progress {
@@ -269,21 +269,22 @@ app {
 .spinner {
     border: 16px solid silver;
     border-top: 16px solid red;
-    border-radius:50%;
-    width:80px;
-    height:80px;
-    animation:spin 700ms linear infinite;
-    top:40%;
-    left:55%;
-    position:absolute;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 700ms linear infinite;
+    top: 40%;
+    left: 55%;
+    position: absolute;
 }
 
-@keyframes spin{
+@keyframes spin {
     0% {
-        transform:rotate(0deg)
+        transform: rotate(0deg)
     }
-    100%{
-        transform:rotate(360deg)
+
+    100% {
+        transform: rotate(360deg)
     }
 }
 
@@ -404,7 +405,7 @@ h3 {
 }
 
 .top-row {
-    height: 5rem;
+    height: 4.5rem;
     display: flex;
-    align-items:center
+    align-items: center
 }
