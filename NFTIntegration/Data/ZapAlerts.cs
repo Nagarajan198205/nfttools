@@ -21,11 +21,11 @@ namespace NFTIntegration.Data
             return zapAlerts;
         }
 
-        public List<ZapAlerts> GetZapAlerts(string zapid)
+        public List<ZapAlerts> GetZapAlerts(string reportid)
         {
             var zapAlerts = new List<ZapAlerts>();
 
-            var recentAlert = new DataAdapter().GetZapReportDetails(zapid);
+            var recentAlert = new DataAdapter().GetZapReportDetails(reportid);
 
             zapAlerts.Add(new ZapAlerts { Risk = "High", Alerts = recentAlert.High });
             zapAlerts.Add(new ZapAlerts { Risk = "Medium", Alerts = recentAlert.Medium });

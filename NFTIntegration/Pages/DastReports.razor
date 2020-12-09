@@ -27,7 +27,7 @@
                     <th scope="col" class="risk-high">High</th>
                     <th scope="col" class="risk-medium">Medium</th>
                     <th scope="col" class="risk-low">Low</th>
-                    <th scope="col" class="risk-info">Information</th>
+                    <th scope="col" class="risk-info">Informational</th>
                     <th scope="col" class="col-header">View Report</th>
                 </tr>
             </thead>
@@ -41,7 +41,7 @@
                         <td>@item.Low</td>
                         <td>@item.Information</td>
                         <td>
-                            <a href="/ZapReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
+                            <a href="/DastReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
                         </td>
                     </tr>
                 }
@@ -80,7 +80,7 @@ else
 
     public void NavigateToUrl(ReportData reportData)
     {
-        string url = $"/ViewZapReport?zapid={reportData.ReportId}";
+        string url = $"/ViewZapReport?reportid={reportData.ReportId}";
         jsRunTime.InvokeVoidAsync("open", url,"_blank").ConfigureAwait(false);
     }
 
@@ -89,6 +89,6 @@ else
 @functions {
     private void CaptureScreenShot()
     {
-        FileUtil.SaveAs(jsRunTime, $"Zap_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+        FileUtil.SaveAs(jsRunTime, $"Dast_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }

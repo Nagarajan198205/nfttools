@@ -135,7 +135,7 @@ namespace NFTIntegration.Data
                 string activeScanId = ((ApiResponseElement)_apiResponse).Value;
                 return activeScanId;
             }
-            catch (Exception ex)
+            catch 
             {
                 return string.Empty;
             }

@@ -169,8 +169,6 @@ namespace NFTIntegration.Classes
                 }
                 bitmap.Save("C://test.jpg", ImageFormat.Jpeg);
             }
-
-
         }
     }
 }

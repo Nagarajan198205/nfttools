@@ -31,7 +31,7 @@ else
 
 @code{
 
-    private string reportId { get; set; }
+    private string _reportId { get; set; }
 
     [Parameter]
     public string AlertDetails { get; set; }
@@ -39,10 +39,10 @@ else
     protected override void OnInitialized()
     {
         var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("zapid", out var _zapid))
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("reportid", out var reportid))
         {
-            reportId = _zapid;
-            AlertDetails = GetRawZapHTMLReport(_zapid);
+            _reportId = reportid;
+            AlertDetails = GetRawZapHTMLReport(reportid);
         }
     }
 
@@ -52,7 +52,7 @@ else
         {
             try
             {
-                var zapAlerts = new ZapAlerts().GetZapAlerts(reportId);
+                var zapAlerts = new ZapAlerts().GetZapAlerts(_reportId);
                 await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
             }
             catch (Exception e)
@@ -67,6 +67,6 @@ else
 @functions {
     private void CaptureScreenShot()
     {
-        FileUtil.SaveAs(jsRunTime, $"ZapReport_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
+        FileUtil.SaveAs(jsRunTime, $"DastReport_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }

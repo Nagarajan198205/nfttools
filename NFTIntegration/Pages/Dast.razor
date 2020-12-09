@@ -2,15 +2,15 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.ZapBase
-@using Classes 
-@using NFTIntegration.Components 
+@using Classes
+@using NFTIntegration.Components
 
 
 <div class="float-lg-right">
     <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
 </div>
 
-<AnchorNavigation/>
+<AnchorNavigation />
 
 @if (ZapModel == null)
 {
@@ -49,6 +49,12 @@ else
             {
                 <div>
                     @((MarkupString)ReportFileContent)
+                </div>
+            }
+            else
+            {
+                <div class="center">
+                    <h3>URL not reachable!</h3>
                 </div>
             }
 

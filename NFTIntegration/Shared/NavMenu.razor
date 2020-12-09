@@ -1,12 +1,9 @@
-﻿@inherits NFTIntegration.Classes.TabsBase
-
-<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Security Testing Tools</a>
+﻿<div class="top-row center">
+    <img src="../Images/logo.png" width="120" height="120" alt="rAtOOns" />
     <button class="navbar-toggler">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
-
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
@@ -17,13 +14,13 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu1= !expandSubMenu1">
-                <span class="oi oi-book" aria-hidden="true"></span>Information Gathering
+                <span class="oi oi-book" aria-hidden="true"></span>Information gathering
             </NavLink>
             @if (expandSubMenu1)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="Nmap" @onclick='()=>AddTabs("Nmap")'>
+                        <NavLink class="nav-link" href="Nmap">
                             <span class="oi oi-map" aria-hidden="true"></span>Nmap
                         </NavLink>
                     </li>
@@ -33,13 +30,13 @@
 
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu2= !expandSubMenu2">
-                <span class="oi oi-script" aria-hidden="true"></span>Web Vulnerability Scanners
+                <span class="oi oi-script" aria-hidden="true"></span>Web vulnerability scanners
             </NavLink>
             @if (expandSubMenu2)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="zap" @onclick='()=>AddTabs("Zap")'>
+                        <NavLink class="nav-link" href="dast">
                             <span class="oi oi-globe" aria-hidden="true"></span>DAST
                         </NavLink>
                     </li>
@@ -49,11 +46,122 @@
 
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu3= !expandSubMenu3">
-                <span class="oi oi-bar-chart" aria-hidden="true"></span>Reports
+                <span class="oi oi-hard-drive" aria-hidden="true"></span>Database assessment
             </NavLink>
             @if (expandSubMenu3)
             {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="databaseassessment">
+                            <span class="oi oi-hard-drive" aria-hidden="true"></span>Database assessment
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
 
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu4= !expandSubMenu4">
+                <span class="oi oi-shield" aria-hidden="true"></span>Password attacks
+            </NavLink>
+            @if (expandSubMenu4)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="passwordattacks">
+                            <span class="oi oi-shield" aria-hidden="true"></span>Password attacks
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu5= !expandSubMenu5">
+                <span class="oi oi-wifi" aria-hidden="true"></span>Wireless attacks
+            </NavLink>
+            @if (expandSubMenu5)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="wirelessattacks">
+                            <span class="oi oi-wifi" aria-hidden="true"></span>Wireless attacks
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu6= !expandSubMenu6">
+                <span class="oi oi-crop" aria-hidden="true"></span>Sniffing & spoofing
+            </NavLink>
+            @if (expandSubMenu6)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="sniffingspoofing">
+                            <span class="oi oi-crop" aria-hidden="true"></span>Sniffing & spoofing
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu7= !expandSubMenu7">
+                <span class="oi oi-spreadsheet" aria-hidden="true"></span>Post exploitation
+            </NavLink>
+            @if (expandSubMenu7)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="postexploitation">
+                            <span class="oi oi-spreadsheet" aria-hidden="true"></span>Post exploitation
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu8= !expandSubMenu8">
+                <span class="oi oi-fire" aria-hidden="true"></span>Forensics
+            </NavLink>
+            @if (expandSubMenu8)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="forensics">
+                            <span class="oi oi-fire" aria-hidden="true"></span>Forensics
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu9= !expandSubMenu9">
+                <span class="oi oi-file" aria-hidden="true"></span>Cheat sheet
+            </NavLink>
+            @if (expandSubMenu9)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="nmapcheatsheet">
+                            <span class="oi oi-map" aria-hidden="true"></span>Nmap
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu10= !expandSubMenu10">
+                <span class="oi oi-bar-chart" aria-hidden="true"></span>Reports
+            </NavLink>
+            @if (expandSubMenu10)
+            {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="nmapreports">
@@ -61,17 +169,27 @@
                         </NavLink>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="zapreports">
-                            <span class="oi oi-globe" aria-hidden="true"></span>ZAP
+                        <NavLink class="nav-link" href="dastreports">
+                            <span class="oi oi-globe" aria-hidden="true"></span>Dast
                         </NavLink>
                     </li>
                 </ul>
             }
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="about" @onclick='()=>AddTabs("ABOUT")'>
-                <span class="oi oi-document" aria-hidden="true"></span>About
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu11= !expandSubMenu11">
+                <span class="oi oi-document" aria-hidden="true"></span>Cheat sheet
             </NavLink>
+            @if (expandSubMenu11)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="about">
+                            <span class="oi oi-document" aria-hidden="true"></span>About
+                        </NavLink>
+                    </li>
+                </ul>
+            }
         </li>
     </ul>
 </div>
@@ -82,13 +200,20 @@
     private bool expandSubMenu1;
     private bool expandSubMenu2;
     private bool expandSubMenu3;
+    private bool expandSubMenu4;
+    private bool expandSubMenu5;
+    private bool expandSubMenu6;
+    private bool expandSubMenu7;
+    private bool expandSubMenu8;
+    private bool expandSubMenu9;
+    private bool expandSubMenu10;
+    private bool expandSubMenu11;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-    }
-
+    }    
 }
 
