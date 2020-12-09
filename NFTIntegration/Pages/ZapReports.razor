@@ -17,80 +17,50 @@
 <div id="chartdiv"></div>
 
 
-@if (zapReportData.Count != 0)
+@if (zapReportData.Count > 0)
 {
-    <div class="row">
-        @if (Collapsed)
-        {
-            <div @onclick="@Toggle" class="oi oi-plus result-title">
-                <span class="result-title-text">Click here for detailed report and report history</span>
-            </div>
-        }
-        else
-        {
-            <div @onclick="@Toggle" class="oi oi-minus result-title">
-                <span class="result-title-text">Report History</span>
-            </div>
-        }
-        @Title
-    </div>
-
-    @if (!Collapsed)
-    {
-        <div class="table-responsive-xl">
-            <table class="table table-bordered table-striped mb-0">
-                <thead class="bg-info">
+    <div class="table-responsive-xl">
+        <table class="table table-bordered table-striped mb-0">
+            <thead class="bg-info">
+                <tr>
+                    <th scope="col" class="col-header">Run Date</th>
+                    <th scope="col" class="risk-high">High</th>
+                    <th scope="col" class="risk-medium">Medium</th>
+                    <th scope="col" class="risk-low">Low</th>
+                    <th scope="col" class="risk-info">Information</th>
+                    <th scope="col" class="col-header">View Report</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in zapReportData)
+                {
                     <tr>
-                        <th scope="col" class="col-header">Run Date</th>
-                        <th scope="col" class="risk-high">High</th>
-                        <th scope="col" class="risk-medium">Medium</th>
-                        <th scope="col" class="risk-low">Low</th>
-                        <th scope="col" class="risk-info">Information</th>
-                        <th scope="col" class="col-header">View Report</th>
+                        <th>@item.RunDate</th>
+                        <td>@item.High</td>
+                        <td>@item.Medium</td>
+                        <td>@item.Low</td>
+                        <td>@item.Information</td>
+                        <td>
+                            <a href="/ZapReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in zapReportData)
-                    {
-                        <tr>
-                            <th>@item.RunDate</th>
-                            <td>@item.High</td>
-                            <td>@item.Medium</td>
-                            <td>@item.Low</td>
-                            <td>@item.Information</td>
-                            <td>
-                                <a href="/ZapReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
+                }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
-    <h3>No reports available!</h3>
+    <div class="center">
+        <h3>No reports available!</h3>
+    </div>
 }
 
 
 @code{
 
     [Parameter]
-    public bool Collapsed { get; set; } = true;
-
-    [Parameter]
-    public string Title { get; set; }
-
-    [Parameter]
     public List<ReportData> zapReportData { get; set; } = new DataAdapter().GetZapReportList();
-
-    void Toggle()
-    {
-        Collapsed = !Collapsed;
-    }
-
-    ZapAlerts zapAlert = new ZapAlerts();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -98,8 +68,8 @@ else
         {
             try
             {
-                var zapAlerts = zapAlert.GetZapAlerts();
-                await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
+                var zapAlerts = new ZapAlerts().GetZapAlerts();
+                await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -108,16 +78,12 @@ else
         }
     }
 
-    public async void NavigateToUrl(ReportData reportData)
+    public void NavigateToUrl(ReportData reportData)
     {
         string url = $"/ViewZapReport?zapid={reportData.ReportId}";
-        await NavigateToNewTab(url).ConfigureAwait(false);
+        jsRunTime.InvokeVoidAsync("open", url,"_blank").ConfigureAwait(false);
     }
 
-    public async Task NavigateToNewTab(string url)
-    {
-        await jsRunTime.InvokeAsync<object>("open", url, "_blank");
-    }
 }
 
 @functions {
