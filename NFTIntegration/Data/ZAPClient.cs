@@ -97,20 +97,15 @@ namespace NFTIntegration.Data
             try
             {
                 File.WriteAllBytes(reportFilePath, _api.core.htmlreport());
-                ReportFileContent = File.ReadAllText(reportFilePath);
-                ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
+                var htmlString = File.ReadAllText(reportFilePath);
+                ReportFileContent = NormalizeReportDetails(htmlString);
             }
             catch
             {
                 //to do
             }
 
-        }
-
-        private void WriteXmlReport(string reportFileName)
-        {
-            File.WriteAllBytes(reportFileName + ".xml", _api.core.xmlreport());
-        }
+        }         
 
         private void PollTheActiveScannerTillCompletion(string activeScanId)
         {
@@ -135,7 +130,7 @@ namespace NFTIntegration.Data
                 string activeScanId = ((ApiResponseElement)_apiResponse).Value;
                 return activeScanId;
             }
-            catch 
+            catch
             {
                 return string.Empty;
             }
@@ -208,9 +203,15 @@ namespace NFTIntegration.Data
             }
         }
 
-        private void LoadTargetUrlToSitesTree()
+        private string NormalizeReportDetails(string reportDetails)
         {
-            _api.AccessUrl(_target);
+            var details = reportDetails.Replace("#info", "dast#info").Replace("#low", "dast#low").Replace("#medium", "dast#medium").Replace("#high", "dast#high");
+            //remove logo
+            details = details.Replace(details.Substring(details.IndexOf("<img"), details.IndexOf("ggg==") + 7 - details.IndexOf("<img")), string.Empty);
+            //rename report name
+            details = details.Replace("ZAP Scanning Report", "DAST Scanning Report");
+
+            return details;
         }
     }
 }

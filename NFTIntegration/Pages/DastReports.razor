@@ -80,7 +80,7 @@ else
 
     public void NavigateToUrl(ReportData reportData)
     {
-        string url = $"/ViewZapReport?reportid={reportData.ReportId}";
+        string url = $"/ViewDastReport?reportid={reportData.ReportId}";
         jsRunTime.InvokeVoidAsync("open", url,"_blank").ConfigureAwait(false);
     }
 

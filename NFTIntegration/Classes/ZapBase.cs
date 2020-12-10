@@ -19,7 +19,6 @@ namespace NFTIntegration.Classes
 
         public ZapBase()
         {
-
         }
 
         protected override async Task OnInitializedAsync()
@@ -30,23 +29,16 @@ namespace NFTIntegration.Classes
 
         private void InitalizeZapTool()
         {
-            var sessionPath = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["SessionPath"];
-            var attributes = $"-daemon -newsession {sessionPath}_{DateTime.Now:ddMMyyyyHHmmss}";
-            var processList = Process.GetProcessesByName("java");
+            var fileToRun = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\zaprun.bat";
+            Process process = new Process();
 
-            if (processList.Length == 0)
-            {
-                var shell = System.Management.Automation.PowerShell.Create();
-                var currentDir = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\";
-                var driveLabel = currentDir.Substring(0, currentDir.IndexOf(":") + 1);
-
-                shell.Commands.AddScript(driveLabel);
-                shell.Commands.AddScript($"cd {currentDir}");
-                shell.Commands.AddScript($"zap.bat {attributes}");
-
-                shell.Invoke();
-            }
-
+            process.StartInfo.FileName = fileToRun;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(fileToRun);
+            // Run the process and wait for it to complete
+            process.Start();
+            //process.WaitForExit();
             ZapModel = new ZapModel();
         }
 
@@ -57,53 +49,25 @@ namespace NFTIntegration.Classes
 
             if (File.Exists(filePath))
             {
-                ReportFileContent = File.ReadAllText(filePath);
-                ReportFileContent = ReportFileContent.Replace("#info", "zap#info").Replace("#low", "zap#low").Replace("#medium", "zap#medium").Replace("#high", "zap#high");
+                var htmlString = File.ReadAllText(filePath);
+                ReportFileContent = NormalizeReport(htmlString);
             }
         }
 
-        public string GetRawZapHTMLReport(string reportID)
+        public string GetRawZapHTMLReport(string reportId)
         {
-            var reportFileName = new DataAdapter().GetZapReportDetails(reportID);
-
-            var htmlText = "";
-
-            var borderLine = "<tr valign=\"top\">"
-                             + "   <td colspan=\"2\"></td>"
-                             + "</tr >";
+            var reportFileName = new DataAdapter().GetZapReportDetails(reportId);
+            var reportDetails = string.Empty;
 
             var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName.ReportFileName}";
 
             if (File.Exists(filePath))
             {
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    String line;
-                    Boolean tablesFound = false;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        if (line.Contains("class=\"results\"") || tablesFound)
-                        {
-                            tablesFound = true;
-
-                            if (line.Contains("</body>"))
-                            {
-                                break;
-                            }
-
-                            var htmlLine = line.Contains("</tr>")
-                                ? line.ToString() + Environment.NewLine + borderLine
-                                : line.ToString();
-
-                            htmlText = htmlText == ""
-                                ? htmlLine
-                                : htmlText + Environment.NewLine + htmlLine;
-                        }
-                    }
-                }
+                var htmlString = File.ReadAllText(filePath);
+                reportDetails = NormalizeReportDetails(htmlString);
             }
 
-            return htmlText;
+            return reportDetails;
         }
 
         public async Task HandleValidSubmit()
@@ -121,6 +85,32 @@ namespace NFTIntegration.Classes
 
             IsScanning = false;
             StateHasChanged();
+        }
+
+        private string NormalizeReport(string reportDetails)
+        {
+            var details = reportDetails.Replace("#info", "dast#info").Replace("#low", "dast#low").Replace("#medium", "dast#medium").Replace("#high", "dast#high");
+            //remove logo
+            details = details.Replace(details.Substring(details.IndexOf("<img"), details.IndexOf("ggg==") + 7 - details.IndexOf("<img")), string.Empty);
+            //rename report name
+            details = details.Replace("ZAP Scanning Report", "DAST Scanning Report");
+
+            return details;
+        }
+
+        private string NormalizeReportDetails(string reportDetails)
+        {
+            var details = reportDetails.Replace("#info", "dast#info").Replace("#low", "dast#low").Replace("#medium", "dast#medium").Replace("#high", "dast#high");
+            //remove logo
+            details = details.Replace(details.Substring(details.IndexOf("<img"), details.IndexOf("ggg==") + 7 - details.IndexOf("<img")), string.Empty);
+            //rename report name
+            details = details.Replace("ZAP Scanning Report", string.Empty);
+
+            //remove Alert Summary
+            details = details.Replace(details.Substring(details.IndexOf("<h3>"), details.IndexOf("</h3>") - details.IndexOf("<h3>")), string.Empty);
+            details = details.Replace(details.Substring(details.IndexOf("<table"), details.IndexOf("</table>") - details.IndexOf("<table")), string.Empty);
+
+            return details;
         }
     }
 }
