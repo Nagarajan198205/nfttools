@@ -157,18 +157,5 @@ namespace NFTIntegration.Classes
             //Output += currentStreamRecord.Exception.Message;
             Output += $@"<br /><span class=""error"">{System.Web.HttpUtility.HtmlEncode(currentStreamRecord.Exception.Message)}</span>";
         }
-
-        public void CaptureScreenShot()
-        {
-            Rectangle bounds = Screen.GetBounds(Point.Empty);
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                }
-                bitmap.Save("C://test.jpg", ImageFormat.Jpeg);
-            }
-        }
     }
 }

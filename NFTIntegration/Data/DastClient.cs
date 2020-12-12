@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace NFTIntegration.Data
 {
-    public class ZAPClient
+    public class DastClient
     {
 
         private static string _apikey;
@@ -21,7 +21,7 @@ namespace NFTIntegration.Data
         private DateTime _dtRunDate;
         public string ReportFileContent { get; set; }
 
-        public ZAPClient()
+        public DastClient()
         {
             _apikey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["APIToken"];
             _port = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["APIRunningPort"];
@@ -68,27 +68,34 @@ namespace NFTIntegration.Data
 
         private void SaveAlertDetails()
         {
-            List<Alert> alerts = _api.GetAlerts(_target, 0, 0, string.Empty);
-
-            if (alerts.Count > 0)
+            try
             {
-                var low = alerts.Where(x => x.Risk == Alert.RiskLevel.Low).GroupBy(x => x.AlertMessage).Count();
-                var medium = alerts.Where(x => x.Risk == Alert.RiskLevel.Medium).GroupBy(x => x.AlertMessage).Count();
-                var high = alerts.Where(x => x.Risk == Alert.RiskLevel.High).GroupBy(x => x.AlertMessage).Count();
-                var informational = alerts.Where(x => x.Risk == Alert.RiskLevel.Informational).GroupBy(x => x.AlertMessage).Count();
+                List<Alert> alerts = _api.GetAlerts(_target, 0, 0, string.Empty);
 
-                var reportId = Convert.ToInt64(_dtRunDate.ToString("yyyyMMddhhmmss"));
-
-                new DataAdapter().AddReportDetails(new ReportData
+                if (alerts.Count > 0)
                 {
-                    ReportId = reportId,
-                    RunDate = _runDate,
-                    ReportFileName = _reportFileName,
-                    High = high,
-                    Medium = medium,
-                    Low = low,
-                    Information = informational
-                });
+                    var low = alerts.Where(x => x.Risk == Alert.RiskLevel.Low).GroupBy(x => x.AlertMessage).Count();
+                    var medium = alerts.Where(x => x.Risk == Alert.RiskLevel.Medium).GroupBy(x => x.AlertMessage).Count();
+                    var high = alerts.Where(x => x.Risk == Alert.RiskLevel.High).GroupBy(x => x.AlertMessage).Count();
+                    var informational = alerts.Where(x => x.Risk == Alert.RiskLevel.Informational).GroupBy(x => x.AlertMessage).Count();
+
+                    var reportId = Convert.ToInt64(_dtRunDate.ToString("yyyyMMddhhmmss"));
+
+                    new DataAdapter().AddReportDetails(new ReportData
+                    {
+                        ReportId = reportId,
+                        RunDate = _runDate,
+                        ReportFileName = _reportFileName,
+                        High = high,
+                        Medium = medium,
+                        Low = low,
+                        Information = informational
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
         }
 

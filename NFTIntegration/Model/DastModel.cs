@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NFTIntegration.Model
 {
-    public class ZapModel
+    public class DastModel
     {
         [Required]
         public string Url { get; set; }

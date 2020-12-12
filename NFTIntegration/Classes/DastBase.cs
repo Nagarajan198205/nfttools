@@ -1,33 +1,31 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
 using NFTIntegration.Data;
 using NFTIntegration.Model;
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace NFTIntegration.Classes
 {
-    public class ZapBase : ComponentBase
+    public class DastBase : ComponentBase
     {
 
         protected bool IsScanning { get; set; }
         protected string ReportFileContent { get; set; }
-        protected ZapModel ZapModel;
+        protected DastModel ZapModel;
         protected bool IsLoaded = false;
 
-        public ZapBase()
+        public DastBase()
         {
         }
 
         protected override async Task OnInitializedAsync()
         {
             //await Task.WhenAll(InitalizeZapTool, GetLatestRunReport);
-            await Task.Run(() => Parallel.Invoke(() => InitalizeZapTool(), () => GetLatestRunReport()));
+            await Task.Run(() => Parallel.Invoke(() => InitalizeDastTool(), () => GetLatestRunReport()));
         }
 
-        private void InitalizeZapTool()
+        private void InitalizeDastTool()
         {
             var fileToRun = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\zaprun.bat";
             Process process = new Process();
@@ -39,7 +37,7 @@ namespace NFTIntegration.Classes
             // Run the process and wait for it to complete
             process.Start();
             //process.WaitForExit();
-            ZapModel = new ZapModel();
+            ZapModel = new DastModel();
         }
 
         private void GetLatestRunReport()
@@ -77,7 +75,7 @@ namespace NFTIntegration.Classes
             IsScanning = true;
             StateHasChanged();
 
-            var zapClient = new ZAPClient();
+            var zapClient = new DastClient();
 
             await Task.Run(() => zapClient.Scan(ZapModel.Url));
 
