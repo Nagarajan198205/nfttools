@@ -21,34 +21,49 @@ namespace NFTIntegration.Classes
 
         protected override async Task OnInitializedAsync()
         {
-            //await Task.WhenAll(InitalizeZapTool, GetLatestRunReport);
-            await Task.Run(() => Parallel.Invoke(() => InitalizeDastTool(), () => GetLatestRunReport()));
+            await Task.WhenAll(InitalizeDastTool(), GetLatestRunReport());
         }
 
-        private void InitalizeDastTool()
+        private async Task InitalizeDastTool()
         {
-            var fileToRun = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\zaprun.bat";
-            Process process = new Process();
-
-            process.StartInfo.FileName = fileToRun;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(fileToRun);
-            // Run the process and wait for it to complete
-            process.Start();
-            //process.WaitForExit();
-            ZapModel = new DastModel();
-        }
-
-        private void GetLatestRunReport()
-        {
-            var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
-            var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}";
-
-            if (File.Exists(filePath))
+            if (!IsLoaded)
             {
-                var htmlString = File.ReadAllText(filePath);
-                ReportFileContent = NormalizeReport(htmlString);
+                IsLoaded = true;
+
+                await Task.Run(() =>
+                {
+                    var fileToRun = $"{Directory.GetCurrentDirectory()}\\Tools\\zap\\zaprun.bat";
+                    Process process = new Process();
+
+                    process.StartInfo.FileName = fileToRun;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(fileToRun);
+                    process.Start();
+
+                    System.Threading.Thread.Sleep(10000);
+
+                    //process.WaitForExit();
+                    ZapModel = new DastModel();
+                });
+            }
+        }
+
+        private async Task GetLatestRunReport()
+        {
+            if (!IsLoaded)
+            {
+                await Task.Run(() =>
+            {
+                var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
+                var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}";
+
+                if (File.Exists(filePath))
+                {
+                    var htmlString = File.ReadAllText(filePath);
+                    ReportFileContent = NormalizeReport(htmlString);
+                }
+            });
             }
         }
 
