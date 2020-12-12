@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NFTIntegration.Data;
 using NFTIntegration.Model;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -85,19 +86,26 @@ namespace NFTIntegration.Classes
 
         public async Task HandleValidSubmit()
         {
-            ReportFileContent = string.Empty;
+            try
+            {
+                ReportFileContent = string.Empty;
 
-            IsScanning = true;
-            StateHasChanged();
+                IsScanning = true;
+                StateHasChanged();
 
-            var zapClient = new DastClient();
+                var zapClient = new DastClient();
 
-            await Task.Run(() => zapClient.Scan(ZapModel.Url));
+                await Task.Run(() => zapClient.Scan(ZapModel.Url));
 
-            ReportFileContent = zapClient.ReportFileContent;
+                ReportFileContent = zapClient.ReportFileContent;
 
-            IsScanning = false;
-            StateHasChanged();
+                IsScanning = false;
+                StateHasChanged();
+            }
+            catch
+            {
+                IsScanning = false;
+            }           
         }
 
         private string NormalizeReport(string reportDetails)
