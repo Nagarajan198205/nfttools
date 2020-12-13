@@ -1,4 +1,5 @@
-﻿@page "/dast"
+﻿@layout MainLayout
+@page "/dast"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.DastBase
@@ -11,6 +12,13 @@
 </div>
 
 <AnchorNavigation />
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="alert-danger">
+        @ErrorMessage
+    </div>
+}
 
 @if (ZapModel == null)
 {

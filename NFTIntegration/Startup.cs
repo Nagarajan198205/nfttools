@@ -25,7 +25,10 @@ namespace NFTIntegration
             services.AddServerSideBlazor();
             services.AddScoped<ProcessInfo>();
             services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
-            
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAlertService, AlertService>();
+            services.AddScoped<ILocalStorageService, LocalStorageService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +42,7 @@ namespace NFTIntegration
             //{
             //    app.UseExceptionHandler("/Error");
             //}
-             
+
             app.UseDeveloperExceptionPage();
             app.UseHsts();
             app.UseStaticFiles();

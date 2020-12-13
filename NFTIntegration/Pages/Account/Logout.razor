@@ -1,0 +1,8 @@
+﻿@page "/account/logout"
+@layout LoginLayout
+@inject NFTIntegration.Classes.IAccountService AccountService
+
+@code { protected override async void OnInitialized()
+            {
+                await AccountService.Logout();
+            } }

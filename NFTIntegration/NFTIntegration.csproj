@@ -50,6 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Account\Layout.razor" />
+    <None Include="Pages\Account\Login.razor" />
+    <None Include="Pages\Account\Logout.razor" />
+    <None Include="Pages\Account\Register.razor" />
     <None Include="Tools\zap\.install4j\autoUninstall.1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

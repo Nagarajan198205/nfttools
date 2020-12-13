@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+@inject NFTIntegration.Classes.IAccountService AccountService
+@inject NavigationManager NavigationManager
+
+    <div class="top-row center">
+        <img src="../Images/logo.png" width="150" height="150" alt="rAtOOns" />
+        <button class="navbar-toggler">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    @if (LoggedIn)
+    {<!-- nav -->
+                        <nav class="navbar navbar-expand navbar-dark bg-dark">
+                            <div class="navbar-nav">
+                                <NavLink href="account/logout" class="nav-item nav-link">Logout</NavLink>
+                            </div>
+                        </nav>}
+
+    <div class="app-container @(LoggedIn ? "bg-light" : "")">
+        <Alert />
+        @Body
+    </div>
+
+    @code { public bool LoggedIn
+        {
+            get { return AccountService.User != null; }
+        } }

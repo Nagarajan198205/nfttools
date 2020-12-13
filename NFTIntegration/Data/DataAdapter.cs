@@ -1,4 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
+using NFTIntegration.Models.Account;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -123,6 +125,53 @@ namespace NFTIntegration.Data
                 var command = new SqliteCommand($"INSERT INTO ZapReports(ReportId,High,Medium,Low,Information,ReportFileName,RunDate) " +
                                                 $"VALUES({reportData.ReportId},{reportData.High},{reportData.Medium},{reportData.Low}," +
                                                 $"{reportData.Information},'{reportData.ReportFileName}','{reportData.RunDate}')", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                command.ExecuteNonQuery();
+
+                CloseConnection(sqliteConnection);
+            }
+        }
+
+        public User Login(string userName,string password)
+        {
+            var userDetails = new User();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    userDetails.UserId = reader.GetInt32("UserId");
+                    userDetails.FirstName = reader.GetString("FirstName");
+                    userDetails.LastName = reader.GetString("LastName");
+                    userDetails.Username = reader.GetString("UserName");
+                }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return userDetails;
+        }
+
+        public void AddUser(AddUser user)
+        {
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"INSERT INTO User (FirstName,LastName,UserName,Password,CreatedOn) " +
+                                                $"VALUES('{user.FirstName}','{user.LastName}','{user.Username}','{user.Password}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };

@@ -1,4 +1,5 @@
-﻿@page "/DastReports"
+﻿@layout MainLayout
+@page "/DastReports"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.DastBase
@@ -81,7 +82,7 @@ else
     public void NavigateToUrl(ReportData reportData)
     {
         string url = $"/ViewDastReport?reportid={reportData.ReportId}";
-        jsRunTime.InvokeVoidAsync("open", url,"_blank").ConfigureAwait(false);
+        jsRunTime.InvokeVoidAsync("open", url, "_blank").ConfigureAwait(false);
     }
 
 }

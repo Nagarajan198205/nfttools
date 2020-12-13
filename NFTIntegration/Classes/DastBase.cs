@@ -15,6 +15,7 @@ namespace NFTIntegration.Classes
         protected string ReportFileContent { get; set; }
         protected DastModel ZapModel;
         protected bool IsLoaded = false;
+        protected string ErrorMessage = string.Empty;
 
         public DastBase()
         {
@@ -100,11 +101,13 @@ namespace NFTIntegration.Classes
                 ReportFileContent = zapClient.ReportFileContent;
 
                 IsScanning = false;
+                ErrorMessage = string.Empty;
                 StateHasChanged();
             }
-            catch
+            catch(Exception ex)
             {
                 IsScanning = false;
+                ErrorMessage = ex.Message;
             }           
         }
 
