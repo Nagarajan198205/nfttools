@@ -143,7 +143,7 @@ namespace NFTIntegration.Data
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
+                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName FROM User WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };

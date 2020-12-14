@@ -8,19 +8,19 @@
 <div class="@NavMenuCssClass min-vh-100" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+            <NavLink class="nav-link active" href="apps/dashboard" Match="NavLinkMatch.All">
                 <span class="oi oi-dashboard" aria-hidden="true"></span>Dashboard
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu1= !expandSubMenu1">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu1= !expandSubMenu1">
                 <span class="oi oi-book" aria-hidden="true"></span>Information gathering
             </NavLink>
             @if (expandSubMenu1)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="Nmap">
+                        <NavLink class="nav-link" href="apps/Nmap">
                             <span class="oi oi-map" aria-hidden="true"></span>Nmap
                         </NavLink>
                     </li>
@@ -29,14 +29,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu2= !expandSubMenu2">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu2= !expandSubMenu2">
                 <span class="oi oi-script" aria-hidden="true"></span>Web vulnerability scanners
             </NavLink>
             @if (expandSubMenu2)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="dast">
+                        <NavLink class="nav-link" href="apps/dast">
                             <span class="oi oi-globe" aria-hidden="true"></span>DAST
                         </NavLink>
                     </li>
@@ -45,14 +45,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu3= !expandSubMenu3">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu3= !expandSubMenu3">
                 <span class="oi oi-hard-drive" aria-hidden="true"></span>Database assessment
             </NavLink>
             @if (expandSubMenu3)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="databaseassessment">
+                        <NavLink class="nav-link" href="apps/databaseassessment">
                             <span class="oi oi-hard-drive" aria-hidden="true"></span>Database assessment
                         </NavLink>
                     </li>
@@ -61,14 +61,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu4= !expandSubMenu4">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu4= !expandSubMenu4">
                 <span class="oi oi-shield" aria-hidden="true"></span>Password attacks
             </NavLink>
             @if (expandSubMenu4)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="passwordattacks">
+                        <NavLink class="nav-link" href="apps/passwordattacks">
                             <span class="oi oi-shield" aria-hidden="true"></span>Password attacks
                         </NavLink>
                     </li>
@@ -77,14 +77,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu5= !expandSubMenu5">
+            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu5= !expandSubMenu5">
                 <span class="oi oi-wifi" aria-hidden="true"></span>Wireless attacks
             </NavLink>
             @if (expandSubMenu5)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="wirelessattacks">
+                        <NavLink class="nav-link" href="apps/wirelessattacks">
                             <span class="oi oi-wifi" aria-hidden="true"></span>Wireless attacks
                         </NavLink>
                     </li>
@@ -93,14 +93,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu6= !expandSubMenu6">
+            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu6= !expandSubMenu6">
                 <span class="oi oi-crop" aria-hidden="true"></span>Sniffing & spoofing
             </NavLink>
             @if (expandSubMenu6)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="sniffingspoofing">
+                        <NavLink class="nav-link" href="apps/sniffingspoofing">
                             <span class="oi oi-crop" aria-hidden="true"></span>Sniffing & spoofing
                         </NavLink>
                     </li>
@@ -109,14 +109,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu7= !expandSubMenu7">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu7= !expandSubMenu7">
                 <span class="oi oi-spreadsheet" aria-hidden="true"></span>Post exploitation
             </NavLink>
             @if (expandSubMenu7)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="postexploitation">
+                        <NavLink class="nav-link" href="apps/postexploitation">
                             <span class="oi oi-spreadsheet" aria-hidden="true"></span>Post exploitation
                         </NavLink>
                     </li>
@@ -125,14 +125,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu8= !expandSubMenu8">
+            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu8= !expandSubMenu8">
                 <span class="oi oi-fire" aria-hidden="true"></span>Forensics
             </NavLink>
             @if (expandSubMenu8)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="forensics">
+                        <NavLink class="nav-link" href="apps/forensics">
                             <span class="oi oi-fire" aria-hidden="true"></span>Forensics
                         </NavLink>
                     </li>
@@ -141,14 +141,14 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu9= !expandSubMenu9">
+            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu9= !expandSubMenu9">
                 <span class="oi oi-file" aria-hidden="true"></span>Cheat sheet
             </NavLink>
             @if (expandSubMenu9)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="nmapcheatsheet">
+                        <NavLink class="nav-link" href="apps/nmapcheatsheet">
                             <span class="oi oi-map" aria-hidden="true"></span>Nmap
                         </NavLink>
                     </li>
@@ -157,32 +157,32 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" @onclick="()=>expandSubMenu10= !expandSubMenu10">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu10= !expandSubMenu10">
                 <span class="oi oi-bar-chart" aria-hidden="true"></span>Reports
             </NavLink>
             @if (expandSubMenu10)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="nmapreports">
+                        <NavLink class="nav-link" href="apps/nmapreports">
                             <span class="oi oi-map" aria-hidden="true"></span>Nmap
                         </NavLink>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="dastreports">
+                        <NavLink class="nav-link" href="apps/dastreports">
                             <span class="oi oi-globe" aria-hidden="true"></span>Dast
                         </NavLink>
                     </li>F
                 </ul>
             }
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="update">
+        <li class="nav-item px-3 active">
+            <NavLink class="nav-link" href="apps/update">
                 <span class="oi oi-cloud-download" aria-hidden="true"></span>Update
             </NavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="about">
+        <li class="nav-item px-3 active">
+            <NavLink class="nav-link" href="apps/about">
                 <span class="oi oi-document" aria-hidden="true"></span>About
             </NavLink>
         </li>

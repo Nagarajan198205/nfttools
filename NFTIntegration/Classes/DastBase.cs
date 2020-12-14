@@ -23,7 +23,7 @@ namespace NFTIntegration.Classes
 
         protected override async Task OnInitializedAsync()
         {
-            await Task.WhenAll(InitalizeDastTool(), GetLatestRunReport());
+            await Task.Run(() => GetLatestRunReport());
         }
 
         private async Task InitalizeDastTool()
@@ -45,17 +45,14 @@ namespace NFTIntegration.Classes
 
                     System.Threading.Thread.Sleep(10000);
 
-                    //process.WaitForExit();
-                    ZapModel = new DastModel();
+                    //process.WaitForExit(); 
                 });
             }
         }
 
-        private async Task GetLatestRunReport()
+        private void GetLatestRunReport()
         {
             if (!IsLoaded)
-            {
-                await Task.Run(() =>
             {
                 var reportFileName = new DataAdapter().GetLastRunZapReport()?.ReportFileName;
                 var filePath = $"{Directory.GetCurrentDirectory()}\\Reports\\{reportFileName}";
@@ -65,7 +62,8 @@ namespace NFTIntegration.Classes
                     var htmlString = File.ReadAllText(filePath);
                     ReportFileContent = NormalizeReport(htmlString);
                 }
-            });
+
+                ZapModel = new DastModel();
             }
         }
 
@@ -104,11 +102,11 @@ namespace NFTIntegration.Classes
                 ErrorMessage = string.Empty;
                 StateHasChanged();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 IsScanning = false;
                 ErrorMessage = ex.Message;
-            }           
+            }
         }
 
         private string NormalizeReport(string reportDetails)

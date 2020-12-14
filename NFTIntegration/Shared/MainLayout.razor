@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NFTIntegration.Classes.IAccountService AccountService
 
 <div class="sidebar">
     <NavMenu />
@@ -6,9 +7,21 @@
 
 <div class="main">
     <div class="top-row px-4">
-        
+        @if (LoggedIn)
+        {
+            <!-- nav -->
+            <div class="float-right"><NavLink href="account/logout" class="nav-item nav-link">Logout</NavLink></div>
+        }
     </div>
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code 
+{
+    public bool LoggedIn
+    {
+        get { return AccountService.User != null; }
+    }
+}

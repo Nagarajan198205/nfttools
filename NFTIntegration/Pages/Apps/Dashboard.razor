@@ -1,10 +1,12 @@
 ﻿@layout MainLayout
-@page "/Dashboard"
+@page "/apps/dashboard"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
-@inherits Classes.DastBase
+@inject ILocalStorageService localStorageService
+@inject NavigationManager NavigationManager
 @using Classes
 @using Data;
+@using NFTIntegration.Models.Account
 
 <div class="float-lg-right">
     <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
@@ -34,6 +36,23 @@
                 Console.WriteLine(e.StackTrace.ToString());
             }
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await Task.Run(() =>
+            {
+                var userDetails = localStorageService.GetItem<User>("user").Result;
+
+                if (userDetails == null || (userDetails != null && userDetails.UserId == 0))
+                {
+                    NavigationManager.NavigateTo("/account/login");
+                }
+            }).ConfigureAwait(false);
+        }
+        catch { }
     }
 }
 

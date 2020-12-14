@@ -9,7 +9,7 @@ namespace NFTIntegration.Classes
     {
         User User { get; }
         Task Initialize();
-        Task Login(Login model);
+        Task<User> Login(Login model);
         Task Logout();
         Task Register(AddUser model);
     }
@@ -36,10 +36,12 @@ namespace NFTIntegration.Classes
             User = await _localStorageService.GetItem<User>(_userKey);
         }
 
-        public async Task Login(Login model)
+        public async Task<User> Login(Login model)
         {
-            User = await Task.Run(() => new DataAdapter().Login(model.Username, model.Password)).ConfigureAwait(false);
+            User = await Task.Run(() => new DataAdapter().Login(model.Username, model.Password));
             await _localStorageService.SetItem(_userKey, User);
+
+            return User;
         }
 
         public async Task Logout()
