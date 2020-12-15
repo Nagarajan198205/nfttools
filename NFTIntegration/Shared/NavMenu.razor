@@ -34,13 +34,18 @@
             </NavLink>
             @if (expandSubMenu2)
             {
-                <ul class="nav flex-column">
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="apps/dast">
-                            <span class="oi oi-globe" aria-hidden="true"></span>DAST
-                        </NavLink>
-                    </li>
-                </ul>
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="apps/dast">
+                    <span class="oi oi-globe" aria-hidden="true"></span>DAST
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="http://localhost:8201/zap" target="_blank">
+                    <span class="oi oi-script" aria-hidden="true"></span>zap
+                </NavLink>
+            </li>
+        </ul>
             }
         </li>
 
