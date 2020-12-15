@@ -4,12 +4,8 @@
 @inject IJSRuntime jsRunTime
 @inherits Classes.DastBase
 
-@using Data;
-@using Classes
+@using Data
 
-<div class="float-lg-right">
-    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
-</div>
 
 <h2>Vulnerable reports</h2>
 <div class="center">
@@ -42,7 +38,7 @@
                         <td>@item.Low</td>
                         <td>@item.Information</td>
                         <td>
-                            <a href="/DastReports" @onclick="@(() => NavigateToUrl(@item))">View</a>
+                            <a href="apps/viewdastreport?reportid=@item.ReportId" target="_blank">View</a>
                         </td>
                     </tr>
                 }
@@ -77,19 +73,5 @@ else
                 Console.WriteLine(e.StackTrace.ToString());
             }
         }
-    }
-
-    public void NavigateToUrl(ReportData reportData)
-    {
-        string url = $"/ViewDastReport?reportid={reportData.ReportId}";
-        jsRunTime.InvokeVoidAsync("open", url, "_blank").ConfigureAwait(false);
-    }
-
-}
-
-@functions {
-    private void CaptureScreenShot()
-    {
-        FileUtil.SaveAs(jsRunTime, $"Dast_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }

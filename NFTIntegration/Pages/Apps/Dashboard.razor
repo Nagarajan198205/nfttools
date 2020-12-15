@@ -8,9 +8,6 @@
 @using Data;
 @using NFTIntegration.Models.Account
 
-<div class="float-lg-right">
-    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
-</div>
 
 <h2>Dashboard</h2>
 <div class="center">
@@ -53,12 +50,5 @@
             }).ConfigureAwait(false);
         }
         catch { }
-    }
-}
-
-@functions {
-    private void CaptureScreenShot()
-    {
-        FileUtil.SaveAs(jsRunTime, $"Dashboard_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }

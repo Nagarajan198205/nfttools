@@ -7,12 +7,19 @@ function downloadFromByteArray(options) {
     // Wrap it by Blob object.
     const blob = new Blob([uint8Array], { type: options.contentType });
     // Create "object URL" that is linked to the Blob object.
-    const url = URL.createObjectURL(blob);
-    // Invoke download helper function that implemented in 
-    // the earlier section of this article.
-    downloadFromUrl({ url: url, fileName: options.fileName });
-    // At last, release unused resources.
-    URL.revokeObjectURL(url);
+
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) //For IE
+    {
+        window.navigator.msSaveOrOpenBlob(blob, options.fileName);
+    }
+    else {
+        const url = URL.createObjectURL(blob);
+        // Invoke download helper function that implemented in 
+        // the earlier section of this article.
+        downloadFromUrl({ url: url, fileName: options.fileName });
+        // At last, release unused resources.
+        URL.revokeObjectURL(url);
+    }
 }
 
 function downloadFromUrl(options) {

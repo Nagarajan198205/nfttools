@@ -212,7 +212,7 @@ namespace NFTIntegration.Data
 
         private string NormalizeReportDetails(string reportDetails)
         {
-            var details = reportDetails.Replace("#info", "dast#info").Replace("#low", "dast#low").Replace("#medium", "dast#medium").Replace("#high", "dast#high");
+            var details = reportDetails.Replace("#info", "apps/dast#info").Replace("#low", "apps/dast#low").Replace("#medium", "apps/dast#medium").Replace("#high", "apps/dast#high");
             //remove logo
             details = details.Replace(details.Substring(details.IndexOf("<img"), details.IndexOf("ggg==") + 7 - details.IndexOf("<img")), string.Empty);
             //rename report name

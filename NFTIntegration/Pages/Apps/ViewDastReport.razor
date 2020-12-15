@@ -7,9 +7,6 @@
 @using Data;
 @using Microsoft.AspNetCore.WebUtilities;
 
-<div class="float-lg-right">
-    <button class="btn" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
-</div>
 
 <h2>DAST detailed report</h2>
 <div class="center">
@@ -63,11 +60,4 @@ else
         }
     }
 
-}
-
-@functions {
-    private void CaptureScreenShot()
-    {
-        FileUtil.SaveAs(jsRunTime, $"DastReport_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
-    }
 }

@@ -1,13 +1,15 @@
 ﻿@inherits LayoutComponentBase
 @inject NFTIntegration.Classes.IAccountService AccountService
-
+@inject IJSRuntime jsRunTime
+@using Classes 
 
 <div class="sidebar">
-    <NavMenu/>
+    <NavMenu />
 </div>
 
 <div class="main">
     <div class="top-row px-4">
+        <button class="btn bg-transparent float-left" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
         @if (LoggedIn)
         {
             <!-- nav -->
@@ -19,10 +21,17 @@
     </div>
 </div>
 
-@code 
+@code
 {
     public bool LoggedIn
     {
         get { return AccountService.User != null; }
+    }
+}
+
+@functions {
+    private void CaptureScreenShot()
+    {
+        FileUtil.SaveAs(jsRunTime, $"Dast_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.jpg").ConfigureAwait(false);
     }
 }
