@@ -8,8 +8,7 @@
 <div class="element-center">
     <div>
         <Alert />
-    </div>
-    <br />
+    </div>    
     <div class="shadow">
         <div class="card login-page">
             <h4 class="card-header">Login</h4>
@@ -71,5 +70,6 @@
             AlertService.Error(ex.Message);
             loading = false;
             StateHasChanged();
+            AlertService.Clear();
         }
     } }
