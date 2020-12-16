@@ -1,4 +1,6 @@
 ﻿@using Microsoft.Extensions.Configuration
+@inject NFTIntegration.Classes.IAccountService AccountService
+
 <div class="top-row center">
     <img src="../Images/logo.png" width="120" height="120" alt="rAtOOns" />
     <button class="navbar-toggler">
@@ -13,6 +15,7 @@
                 <span class="oi oi-dashboard" aria-hidden="true"></span>Dashboard
             </NavLink>
         </li>
+        @if(userRole){
         <li class="nav-item px-3">
             <NavLink class="nav-link active" @onclick="()=>expandSubMenu1= !expandSubMenu1">
                 <span class="oi oi-book" aria-hidden="true"></span>Information gathering
@@ -35,18 +38,18 @@
             </NavLink>
             @if (expandSubMenu2)
             {
-        <ul class="nav flex-column">
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="apps/dast">
-                    <span class="oi oi-globe" aria-hidden="true"></span>DAST
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="@ExternalZAPURL" target="_blank">
-                    <span class="oi oi-script" aria-hidden="true"></span>zap GUI
-                </NavLink>
-            </li>
-        </ul>
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="apps/dast">
+                            <span class="oi oi-globe" aria-hidden="true"></span>DAST
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="@ExternalZAPURL" target="_blank">
+                            <span class="oi oi-script" aria-hidden="true"></span>zap GUI
+                        </NavLink>
+                    </li>
+                </ul>
             }
         </li>
 
@@ -83,7 +86,7 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu5= !expandSubMenu5">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu5= !expandSubMenu5">
                 <span class="oi oi-wifi" aria-hidden="true"></span>Wireless attacks
             </NavLink>
             @if (expandSubMenu5)
@@ -99,7 +102,7 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu6= !expandSubMenu6">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu6= !expandSubMenu6">
                 <span class="oi oi-crop" aria-hidden="true"></span>Sniffing & spoofing
             </NavLink>
             @if (expandSubMenu6)
@@ -131,7 +134,7 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu8= !expandSubMenu8">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu8= !expandSubMenu8">
                 <span class="oi oi-fire" aria-hidden="true"></span>Forensics
             </NavLink>
             @if (expandSubMenu8)
@@ -147,7 +150,7 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link active"  @onclick="()=>expandSubMenu9= !expandSubMenu9">
+            <NavLink class="nav-link active" @onclick="()=>expandSubMenu9= !expandSubMenu9">
                 <span class="oi oi-file" aria-hidden="true"></span>Cheat sheet
             </NavLink>
             @if (expandSubMenu9)
@@ -161,7 +164,7 @@
                 </ul>
             }
         </li>
-
+        }
         <li class="nav-item px-3">
             <NavLink class="nav-link active" @onclick="()=>expandSubMenu10= !expandSubMenu10">
                 <span class="oi oi-bar-chart" aria-hidden="true"></span>Reports
@@ -208,6 +211,11 @@
     private bool expandSubMenu8;
     private bool expandSubMenu9;
     private bool expandSubMenu10;
+
+    public bool userRole
+    {
+        get { return AccountService.User.Role == "Tester"; }
+    }
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private string ExternalZAPURL = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["ExternalZAPURL"];

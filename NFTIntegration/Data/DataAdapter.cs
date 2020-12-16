@@ -143,7 +143,7 @@ namespace NFTIntegration.Data
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName FROM User WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
+                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName,Role FROM User WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -158,6 +158,7 @@ namespace NFTIntegration.Data
                     userDetails.FirstName = reader.GetString("FirstName");
                     userDetails.LastName = reader.GetString("LastName");
                     userDetails.Username = reader.GetString("UserName");
+                    userDetails.Role = reader.GetString("Role");
                 }
 
                 CloseConnection(sqliteConnection);
@@ -170,8 +171,8 @@ namespace NFTIntegration.Data
         {
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"INSERT INTO User (FirstName,LastName,UserName,Password,CreatedOn) " +
-                                                $"VALUES('{user.FirstName}','{user.LastName}','{user.Username}','{user.Password}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')", sqliteConnection)
+                var command = new SqliteCommand($"INSERT INTO User (FirstName,LastName,UserName,Password,CreatedOn,Role) " +
+                                                $"VALUES('{user.FirstName}','{user.LastName}','{user.Username}','{user.Password}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{user.Role}')", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -182,6 +183,33 @@ namespace NFTIntegration.Data
 
                 CloseConnection(sqliteConnection);
             }
+        }
+
+        public List<string> GetRoles()
+        {
+            List<string> userRoles = new List<string>();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT UserRole FROM Roles", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    userRoles.Add(reader.GetString("UserRole"));
+                    
+                }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return userRoles;
         }
 
         private void OpenConnection(SqliteConnection sqliteConnection)

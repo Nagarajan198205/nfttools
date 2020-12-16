@@ -16,5 +16,8 @@ namespace NFTIntegration.Models.Account
         [Required]
         [MinLength(6, ErrorMessage = "The Password field must be a minimum of 6 characters")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Please select a user role")]
+        public string Role { get; set; }
     }
 }
