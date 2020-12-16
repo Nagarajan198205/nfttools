@@ -1,4 +1,5 @@
-﻿<div class="top-row center">
+﻿@using Microsoft.Extensions.Configuration
+<div class="top-row center">
     <img src="../Images/logo.png" width="120" height="120" alt="rAtOOns" />
     <button class="navbar-toggler">
         <span class="navbar-toggler-icon"></span>
@@ -41,8 +42,8 @@
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="http://localhost:8201/zap" target="_blank">
-                    <span class="oi oi-script" aria-hidden="true"></span>zap
+                <NavLink class="nav-link" href="@ExternalZAPURL" target="_blank">
+                    <span class="oi oi-script" aria-hidden="true"></span>zap GUI
                 </NavLink>
             </li>
         </ul>
@@ -209,7 +210,7 @@
     private bool expandSubMenu10;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
+    private string ExternalZAPURL = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["ExternalZAPURL"];
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
