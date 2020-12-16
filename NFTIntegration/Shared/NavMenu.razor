@@ -214,7 +214,7 @@
 
     public bool userRole
     {
-        get { return AccountService.User.Role == "Tester"; }
+        get { return AccountService.User?.Role == "Tester"; }
     }
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;

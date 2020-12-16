@@ -28,7 +28,7 @@ namespace NFTIntegration
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAlertService, AlertService>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
-
+            services.AddScoped<IAppsService, AppsService>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

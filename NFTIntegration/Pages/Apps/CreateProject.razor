@@ -1,0 +1,59 @@
+﻿@layout MainLayout
+@page "/apps/createproject"
+@inject NFTIntegration.Classes.IAppsService AppsService
+@inject NFTIntegration.Classes.IAlertService AlertService
+
+<div class="element-center shadow">
+    <div class="card">
+        <h4 class="card-header">Create a project</h4>
+        <div class="card-body">
+            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label>First Name</label>
+                    <InputText @bind-Value="model.ProjectName" class="form-control" />
+                    <ValidationMessage For="@(() => model.ProjectName)" />
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <InputDate @bind-Value="model.StartDate" class="form-control" />
+                    <ValidationMessage For="@(() => model.StartDate)" />
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <InputDate @bind-Value="model.EndDate" class="form-control" />
+                    <ValidationMessage For="@(() => model.EndDate)" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <InputText @bind-Value="model.Description" type="password" class="form-control" />
+                    <ValidationMessage For="@(() => model.Description)" />
+                </div>
+                <button disabled="@loading" class="btn btn-primary">
+                    @if (loading)
+                    {
+                        <span class="spinner-border spinner-border-sm mr-1"></span>}
+                    Create
+                </button>
+                <NavLink href="apps/createproject" class="btn btn-link">Clear</NavLink>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code { private Models.CreateProjectModel model = new Models.CreateProjectModel();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await AppsService.CreateProject(model);
+        }
+        catch (Exception ex)
+        {
+            loading = false;
+            StateHasChanged();
+        }
+    } }

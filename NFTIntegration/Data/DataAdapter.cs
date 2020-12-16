@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using NFTIntegration.Models;
 using NFTIntegration.Models.Account;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,11 @@ namespace NFTIntegration.Data
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName,Role FROM User WHERE UserName = '{userName}' AND Password='{password}'", sqliteConnection)
+                var command = new SqliteCommand($"SELECT UserId,FirstName,LastName,UserName,rol.RoleDesc as Role " +
+                                                $"FROM User usr " +
+                                                $"INNER JOIN Roles rol ON usr.RoleId = rol.RoleId " +
+                                                $"WHERE UserName = '{userName}' " +
+                                                $"AND Password='{password}'", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -210,6 +215,33 @@ namespace NFTIntegration.Data
             }
 
             return userRoles;
+        }
+
+        public void CreateProject(CreateProjectModel createProjectModel)
+        {
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+
+                var command = new SqliteCommand($"INSERT INTO Project (ProjectName,StartDate,EndDate,Description) " +
+                                                $"VALUES('{createProjectModel.ProjectName}','{createProjectModel.StartDate}','{createProjectModel.EndDate}','{createProjectModel.Description}'); SELECT Last_Insert_Rowid();", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+
+                OpenConnection(sqliteConnection);
+
+                var projectId = Convert.ToInt32(command.ExecuteScalar());
+                 
+                command = new SqliteCommand($"INSERT INTO UserProjectMap (ProjectId,UserId) VALUES({projectId},{createProjectModel.UserId})", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                command.ExecuteNonQuery();
+
+                CloseConnection(sqliteConnection);
+            }
         }
 
         private void OpenConnection(SqliteConnection sqliteConnection)
