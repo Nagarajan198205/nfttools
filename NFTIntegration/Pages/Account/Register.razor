@@ -4,6 +4,7 @@
 @inject NFTIntegration.Classes.IAlertService AlertService
 @inject NavigationManager NavigationManager
 @using NFTIntegration.Models.Account;
+@using NFTIntegration.Data
 
 <div class="element-center shadow">
     <div class="card login-page">
@@ -31,10 +32,21 @@
                     <InputText @bind-Value="model.Password" type="password" class="form-control" />
                     <ValidationMessage For="@(() => model.Password)" />
                 </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select class="form-control" @bind="@model.Role">
+                        <option value=""></option>
+                        @foreach (var role in userRoles)
+                        {
+                            <option value="@role">@role</option>
+                        }
+                    </select>
+                    <ValidationMessage For="@(() => model.Role)" />
+                </div>
                 <button disabled="@loading" class="btn btn-primary">
                     @if (loading)
                     {
-    <span class="spinner-border spinner-border-sm mr-1"></span>}
+                        <span class="spinner-border spinner-border-sm mr-1"></span>}
                     Register
                 </button>
                 <NavLink href="account/login" class="btn btn-link">Cancel</NavLink>
@@ -45,6 +57,14 @@
 
 @code { private AddUser model = new AddUser();
     private bool loading;
+
+
+    List<string> userRoles = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+         await Task.Run(() => userRoles = new DataAdapter().GetRoles()).ConfigureAwait(false);
+    }
 
     private async void OnValidSubmit()
     {

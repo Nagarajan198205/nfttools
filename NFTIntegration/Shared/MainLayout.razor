@@ -9,6 +9,14 @@
 
 <div class="main">
     <div class="top-row px-4">
+        @if (LoggedIn)
+        {
+            <!-- nav -->
+            <div class="float-right"><span class="mt-2 col-md-12">Welcome, @AccountService.User.FirstName @AccountService.User.LastName</span></div>
+            <div class="float-right"><span class="mt-2 col-md-12">|</span></div>
+            <div class="float-right"><span class="mt-2 col-md-12">Role: @AccountService.User.Role</span></div>
+            <div class="float-right"><span class="mt-2 col-md-12">|</span></div>
+        }
         <button class="btn bg-transparent float-left" @onclick="CaptureScreenShot"><i class="oi oi-camera-slr"></i></button>
         @if (LoggedIn)
         {
