@@ -3,8 +3,7 @@
 @inject NavigationManager navigationManager
 @inherits Classes.DastBase
 @inject IJSRuntime jsRunTime
-@using Classes
-@using Data;
+@inject NFTIntegration.Classes.IAppsService AppsService
 @using Microsoft.AspNetCore.WebUtilities;
 
 
@@ -50,7 +49,8 @@ else
         {
             try
             {
-                var zapAlerts = new ZapAlerts().GetZapAlerts(_reportId);
+                var user = await LocalStorageService.GetItem<NFTIntegration.Models.Account.User>("user");
+                var zapAlerts = await AppsService.GetZapAlerts(_reportId, user);
                 await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
             }
             catch (Exception e)

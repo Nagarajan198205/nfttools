@@ -6,64 +6,70 @@
 @using NFTIntegration.Models.Account;
 @using NFTIntegration.Data
 
-<div class="element-center shadow">
-    <div class="card login-page">
-        <h4 class="card-header">Register</h4>
-        <div class="card-body">
-            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-                <DataAnnotationsValidator />
-                <div class="form-group">
-                    <label>First Name</label>
-                    <InputText @bind-Value="model.FirstName" class="form-control" />
-                    <ValidationMessage For="@(() => model.FirstName)" />
-                </div>
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <InputText @bind-Value="model.LastName" class="form-control" />
-                    <ValidationMessage For="@(() => model.LastName)" />
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <InputText @bind-Value="model.Username" class="form-control" />
-                    <ValidationMessage For="@(() => model.Username)" />
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <InputText @bind-Value="model.Password" type="password" class="form-control" />
-                    <ValidationMessage For="@(() => model.Password)" />
-                </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <select class="form-control" @bind="@model.Role">
-                        <option value=""></option>
-                        @foreach (var role in userRoles)
+<div class="element-center">
+    <div>
+        <Alert />
+    </div>
+    <div class="shadow">
+        <div class="card login-page">
+            <h4 class="card-header">Register</h4>
+            <div class="card-body">
+                <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <InputText @bind-Value="model.FirstName" class="form-control" />
+                        <ValidationMessage For="@(() => model.FirstName)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <InputText @bind-Value="model.LastName" class="form-control" />
+                        <ValidationMessage For="@(() => model.LastName)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <InputText @bind-Value="model.Username" class="form-control" />
+                        <ValidationMessage For="@(() => model.Username)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <InputText @bind-Value="model.Password" type="password" class="form-control" />
+                        <ValidationMessage For="@(() => model.Password)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select class="form-control" @bind="@model.RoleId">
+                            <option value=""></option>
+                            @foreach (var role in UserRoles)
+                            {
+                                <option value="@role.RoleId">@role.RoleDesc</option>
+                            }
+                        </select>
+                        <ValidationMessage For="@(() => model.RoleId)" />
+                    </div>
+                    <button disabled="@loading" class="btn btn-primary">
+                        @if (loading)
                         {
-                            <option value="@role">@role</option>
-                        }
-                    </select>
-                    <ValidationMessage For="@(() => model.Role)" />
-                </div>
-                <button disabled="@loading" class="btn btn-primary">
-                    @if (loading)
-                    {
-                        <span class="spinner-border spinner-border-sm mr-1"></span>}
-                    Register
-                </button>
-                <NavLink href="account/login" class="btn btn-link">Cancel</NavLink>
-            </EditForm>
+                            <span class="spinner-border spinner-border-sm mr-1"></span>}
+                        Register
+                    </button>
+                    <NavLink href="account/login" class="btn btn-link">Cancel</NavLink>
+                </EditForm>
+            </div>
         </div>
     </div>
 </div>
 
-@code { private AddUser model = new AddUser();
+@code {
+
+    private AddUser model = new AddUser();
     private bool loading;
 
-
-    List<string> userRoles = new List<string>();
+    List<UserRole> UserRoles = new List<UserRole>();
 
     protected override async Task OnInitializedAsync()
     {
-         await Task.Run(() => userRoles = new DataAdapter().GetRoles()).ConfigureAwait(false);
+        UserRoles = await Task.Run(() => new DataAdapter().GetRoles()).ConfigureAwait(false);
     }
 
     private async void OnValidSubmit()
@@ -75,13 +81,12 @@
         try
         {
             await AccountService.Register(model);
-            AlertService.Success("Registration successful", keepAfterRouteChange: true);
-            NavigationManager.NavigateTo("account/login");
+            AlertService.Success("Registration successful", true, false);
         }
         catch (Exception ex)
         {
             AlertService.Error(ex.Message);
-            loading = false;
-            StateHasChanged();
         }
+        loading = false;
+        StateHasChanged();
     } }

@@ -54,6 +54,45 @@ namespace NFTIntegration.Data
             return reportDataList;
         }
 
+        public List<ReportData> GetZapReportList(int userId)
+        {
+            var reportDataList = new List<ReportData>();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand("SELECT ReportId,High,Medium,Low,Information,ReportFileName,RunDate " +
+                    "FROM ZapReports " +
+                    $"WHERE UserId = {userId} " +
+                    "ORDER BY ReportId DESC LIMIT 10", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    reportDataList.Add(new ReportData
+                    {
+                        ReportId = reader.GetInt64("ReportId"),
+                        High = reader.GetInt32("High"),
+                        Medium = reader.GetInt32("Medium"),
+                        Low = reader.GetInt32("Low"),
+                        Information = reader.GetInt32("Information"),
+                        ReportFileName = reader.GetString("ReportFileName"),
+                        RunDate = reader.GetString("RunDate")
+                    });
+                }
+
+                CloseConnection(sqliteConnection);
+
+            }
+
+            return reportDataList;
+        }
+
         public ReportData GetLastRunZapReport()
         {
             var reportData = new ReportData();
@@ -61,6 +100,41 @@ namespace NFTIntegration.Data
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
                 var command = new SqliteCommand("SELECT ReportId,High,Medium,Low,Information,ReportFileName,RunDate FROM ZapReports ORDER BY ReportId DESC LIMIT 1", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reportData.ReportId = reader.GetInt64("ReportId");
+                    reportData.High = reader.GetInt32("High");
+                    reportData.Medium = reader.GetInt32("Medium");
+                    reportData.Low = reader.GetInt32("Low");
+                    reportData.Information = reader.GetInt32("Information");
+                    reportData.ReportFileName = reader.GetString("ReportFileName");
+                    reportData.RunDate = reader.GetString("RunDate");
+                }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return reportData;
+        }
+
+        public ReportData GetLastRunZapReport(int userId)
+        {
+            var reportData = new ReportData();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT ReportId,High,Medium,Low,Information,ReportFileName,RunDate " +
+                    $"FROM ZapReports " +
+                    $"WHERE UserId = {userId} " +
+                    $"ORDER BY ReportId DESC LIMIT 1", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -119,13 +193,49 @@ namespace NFTIntegration.Data
             return reportDetails;
         }
 
+        public ReportData GetZapReportDetails(string reportId, int userId)
+        {
+            var reportDetails = new ReportData();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT ReportId,High,Medium,Low,Information,ReportFileName,RunDate " +
+                    $"FROM ZapReports " +
+                    $"WHERE ReportId={reportId} " +
+                    $"AND UserId = { userId } ", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    reportDetails.ReportId = reader.GetInt64("ReportId");
+                    reportDetails.High = reader.GetInt32("High");
+                    reportDetails.Medium = reader.GetInt32("Medium");
+                    reportDetails.Low = reader.GetInt32("Low");
+                    reportDetails.Information = reader.GetInt32("Information");
+                    reportDetails.ReportFileName = reader.GetString("ReportFileName");
+                    reportDetails.RunDate = reader.GetString("RunDate");
+                }
+
+                CloseConnection(sqliteConnection);
+
+            }
+
+            return reportDetails;
+        }
+
         public void AddReportDetails(ReportData reportData)
         {
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"INSERT INTO ZapReports(ReportId,High,Medium,Low,Information,ReportFileName,RunDate) " +
+                var command = new SqliteCommand($"INSERT INTO ZapReports(ReportId,High,Medium,Low,Information,ReportFileName,RunDate,UserId) " +
                                                 $"VALUES({reportData.ReportId},{reportData.High},{reportData.Medium},{reportData.Low}," +
-                                                $"{reportData.Information},'{reportData.ReportFileName}','{reportData.RunDate}')", sqliteConnection)
+                                                $"{reportData.Information},'{reportData.ReportFileName}','{reportData.RunDate}',{reportData.UserId})", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -138,7 +248,7 @@ namespace NFTIntegration.Data
             }
         }
 
-        public User Login(string userName,string password)
+        public User Login(string userName, string password)
         {
             var userDetails = new User();
 
@@ -176,8 +286,8 @@ namespace NFTIntegration.Data
         {
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"INSERT INTO User (FirstName,LastName,UserName,Password,CreatedOn,Role) " +
-                                                $"VALUES('{user.FirstName}','{user.LastName}','{user.Username}','{user.Password}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{user.Role}')", sqliteConnection)
+                var command = new SqliteCommand($"INSERT INTO User (FirstName,LastName,UserName,Password,CreatedOn,RoleId) " +
+                                                $"VALUES('{user.FirstName}','{user.LastName}','{user.Username}','{user.Password}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{user.RoleId}')", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -190,13 +300,13 @@ namespace NFTIntegration.Data
             }
         }
 
-        public List<string> GetRoles()
+        public List<UserRole> GetRoles()
         {
-            List<string> userRoles = new List<string>();
+            var userRoles = new List<UserRole>();
 
             using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
             {
-                var command = new SqliteCommand($"SELECT UserRole FROM Roles", sqliteConnection)
+                var command = new SqliteCommand($"SELECT RoleId, RoleDesc FROM Roles", sqliteConnection)
                 {
                     CommandType = CommandType.Text
                 };
@@ -207,8 +317,11 @@ namespace NFTIntegration.Data
 
                 while (reader.Read())
                 {
-                    userRoles.Add(reader.GetString("UserRole"));
-                    
+                    userRoles.Add(new UserRole
+                    {
+                        RoleId= reader.GetInt32("RoleId"),
+                        RoleDesc = reader.GetString("RoleDesc")
+                    });
                 }
 
                 CloseConnection(sqliteConnection);
@@ -232,7 +345,7 @@ namespace NFTIntegration.Data
                 OpenConnection(sqliteConnection);
 
                 var projectId = Convert.ToInt32(command.ExecuteScalar());
-                 
+
                 command = new SqliteCommand($"INSERT INTO UserProjectMap (ProjectId,UserId) VALUES({projectId},{createProjectModel.UserId})", sqliteConnection)
                 {
                     CommandType = CommandType.Text
@@ -242,6 +355,69 @@ namespace NFTIntegration.Data
 
                 CloseConnection(sqliteConnection);
             }
+        }
+
+        public List<Project> GetProjectList(int userId)
+        {
+            var projects = new List<Project>();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT pro.ProjectId,ProjectName " +
+                    $"FROM Project pro " +
+                    $"INNER JOIN UserProjectMap usr ON pro.ProjectId = usr.ProjectId " +
+                    $"WHERE usr.UserId={userId}", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    projects.Add(new Project
+                    {
+                        ProjectId = reader.GetInt32("ProjectId"),
+                        ProjectName = reader.GetString("ProjectName")
+                    });
+                }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return projects;
+        }
+
+        public List<Project> GetProjectList()
+        {
+            var projects = new List<Project>();
+
+            using (var sqliteConnection = new SqliteConnection(sqliteConnectionString))
+            {
+                var command = new SqliteCommand($"SELECT ProjectId,ProjectName FROM Project", sqliteConnection)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                OpenConnection(sqliteConnection);
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    projects.Add(new Project
+                    {
+                        ProjectId = reader.GetInt32("ProjectId"),
+                        ProjectName = reader.GetString("ProjectName")
+                    });
+                }
+
+                CloseConnection(sqliteConnection);
+            }
+
+            return projects;
         }
 
         private void OpenConnection(SqliteConnection sqliteConnection)

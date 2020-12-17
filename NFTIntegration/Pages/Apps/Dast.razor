@@ -3,7 +3,6 @@
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
 @inherits Classes.DastBase
-@using Classes
 @using NFTIntegration.Components
 
 <AnchorNavigation />
@@ -26,10 +25,14 @@ else
     <div>
         <EditForm Model="@ZapModel" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
-
+            <div class="form-group">
+                <label>Project </label>
+                <Projects @bind-Value="ProjectId" @ref="ProjectList"></Projects>
+                <ValidationMessage For="@(() => ZapModel.ProjectId)" />
+            </div>
             <div class="form-control-wrapper">
                 <label class="form-control-label" for="catalogue">Url</label>
-                <InputText class="form-control" id="catalogue" @bind-Value="ZapModel.Url" />
+                <InputText class="form-control" id="url" @bind-Value="ZapModel.Url" />
                 <div class="form-control-validation">
                     <ValidationMessage For="@(() => ZapModel.Url)" />
                 </div>

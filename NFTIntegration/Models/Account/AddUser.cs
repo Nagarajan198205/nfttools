@@ -18,6 +18,6 @@ namespace NFTIntegration.Models.Account
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Please select a user role")]
-        public string Role { get; set; }
+        public int RoleId { get; set; }
     }
 }

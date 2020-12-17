@@ -28,7 +28,7 @@ namespace NFTIntegration.Data
             _api = new ClientApi("localhost", Convert.ToInt32(_port), _apikey);
         }
 
-        public void Scan(string targetUrl)
+        public void Scan(string targetUrl,int userId)
         {
 
             _target = targetUrl;
@@ -63,10 +63,10 @@ namespace NFTIntegration.Data
             }
 
             WriteHtmlReport(_reportFilePath);
-            SaveAlertDetails();
+            SaveAlertDetails(userId);
         }
 
-        private void SaveAlertDetails()
+        private void SaveAlertDetails(int userId)
         {
             try
             {
@@ -89,7 +89,8 @@ namespace NFTIntegration.Data
                         High = high,
                         Medium = medium,
                         Low = low,
-                        Information = informational
+                        Information = informational,
+                        UserId = userId
                     });
                 }
             }

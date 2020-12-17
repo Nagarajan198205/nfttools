@@ -2,7 +2,8 @@
 @page "/apps/dashboard"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
-@inject ILocalStorageService localStorageService
+@inject ILocalStorageService LocalStorageService
+@inject IAppsService AppsService
 @inject NavigationManager NavigationManager
 @using Classes
 @using Data;
@@ -19,14 +20,13 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        ZapAlerts zapAlert = new ZapAlerts();
-
         if (firstRender)
         {
             try
             {
-                var zapAlerts = zapAlert.GetZapAlerts();
-                await jsRunTime.InvokeVoidAsync("generateChartInPercentage", zapAlerts);
+                var userDetails = await LocalStorageService.GetItem<User>("user");
+                var zapAlerts = await AppsService.GetZapAlerts(userDetails);
+                await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
             }
             catch (Exception e)
             {
@@ -41,7 +41,7 @@
         {
             await Task.Run(() =>
             {
-                var userDetails = localStorageService.GetItem<User>("user").Result;
+                var userDetails = LocalStorageService.GetItem<User>("user").Result;
 
                 if (userDetails == null || (userDetails != null && userDetails.UserId == 0))
                 {
@@ -49,6 +49,6 @@
                 }
             }).ConfigureAwait(false);
         }
-        catch { }
+        catch (Exception e) { Console.WriteLine(e.StackTrace.ToString()); }
     }
 }

@@ -1,0 +1,18 @@
+﻿@inherits NFTIntegration.Classes.Projects
+
+@if (ProjectList == null)
+{
+    <p>
+        <em>Loading ...</em>
+    </p>
+}
+else
+{
+    <select class="custom-select" @onchange="OnValueChanged" title="Please select a project ">
+        <option value="Select" selected disabled="disabled">(Choose a project)</option>
+        @foreach (var project in ProjectList)
+        {
+            <option value="@project.ProjectId"> @project.ProjectName</option>
+        }
+    </select>
+}

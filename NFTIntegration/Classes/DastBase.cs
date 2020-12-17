@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NFTIntegration.Data;
 using NFTIntegration.Model;
+using NFTIntegration.Models.Account;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,6 +17,13 @@ namespace NFTIntegration.Classes
         protected DastModel ZapModel;
         protected bool IsLoaded = false;
         protected string ErrorMessage = string.Empty;
+
+        [Parameter]
+        public string ProjectId { get; set; }
+        protected Projects ProjectList { get; set; }
+
+        [Inject]
+        public ILocalStorageService LocalStorageService { get; set; }
 
         public DastBase()
         {
@@ -94,7 +102,9 @@ namespace NFTIntegration.Classes
 
                 var zapClient = new DastClient();
 
-                await Task.Run(() => zapClient.Scan(ZapModel.Url));
+                var user = await LocalStorageService.GetItem<User>("user");
+
+                await Task.Run(() => zapClient.Scan(ZapModel.Url, user.UserId));
 
                 ReportFileContent = zapClient.ReportFileContent;
 

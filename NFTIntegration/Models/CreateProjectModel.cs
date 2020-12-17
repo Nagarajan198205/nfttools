@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Management.Automation;
 
 namespace NFTIntegration.Models
 {
     public class CreateProjectModel
     {
+        [Parameter]
         public int ProjectId { get; set; }
         [Required(ErrorMessage = "Please enter project name")]
         public string ProjectName { get; set; }
