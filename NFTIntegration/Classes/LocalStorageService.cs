@@ -1,5 +1,5 @@
-using Microsoft.JSInterop;
-using System.Text.Json;
+using System;
+using System.Runtime.Caching;
 using System.Threading.Tasks;
 
 namespace NFTIntegration.Classes
@@ -13,31 +13,43 @@ namespace NFTIntegration.Classes
 
     public class LocalStorageService : ILocalStorageService
     {
-        private IJSRuntime _jsRuntime;
+        private static readonly MemoryCache _cache = MemoryCache.Default;
 
-        public LocalStorageService(IJSRuntime jsRuntime)
+        public LocalStorageService()
         {
-            _jsRuntime = jsRuntime;
         }
 
         public async Task<T> GetItem<T>(string key)
         {
-            var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+            object catchItem = null;
 
-            if (json == null)
-                return default;
+            await Task.Run(() =>
+            {
+                if (_cache.Contains(key))
+                {
+                    catchItem = _cache.Get(key);
+                }
+            });
 
-            return JsonSerializer.Deserialize<T>(json);
+            return (T)catchItem;
         }
 
         public async Task SetItem<T>(string key, T value)
         {
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, JsonSerializer.Serialize(value));
+            await Task.Run(() =>
+            {
+                var cacheItemPolicy = new CacheItemPolicy()
+                {
+                    //Set your Cache expiration.
+                    AbsoluteExpiration = DateTime.Now.AddDays(1)
+                };
+                _cache.Add(key, value, cacheItemPolicy);
+            });
         }
 
         public async Task RemoveItem(string key)
         {
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", key);
+            await Task.Run(() => _cache.Remove(key));
         }
     }
 }

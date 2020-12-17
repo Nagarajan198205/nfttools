@@ -11,6 +11,8 @@ namespace NFTIntegration.Data
         public int Information { get; set; }
         public string RunDate { get; set; }
         public string ReportFileName { get; set; }
+        public string ProjectName { get; set; }
+        public int ProjectId { get; set; }
         public int UserId { get; set; }
     }
 }

@@ -1,13 +1,12 @@
 ﻿@layout MainLayout
-@page "/apps/dastReports"
+@page "/apps/ViewDastProjectWiseReport"
 @inject NavigationManager navigationManager
 @inject NFTIntegration.Classes.ILocalStorageService LocalStorageService
 @inject NFTIntegration.Classes.IAppsService AppsService
 @inject IJSRuntime jsRunTime
 @inherits Classes.DastBase
-
+@using Microsoft.AspNetCore.WebUtilities;
 @using Data
-
 
 <h2>Vulnerable reports</h2>
 <div class="center">
@@ -16,7 +15,7 @@
 <div id="chartdiv"></div>
 
 
-@if (ReportDataList?.Count > 0)
+@if (zapReportData?.Count > 0)
 {
     <div class="table-responsive-xl">
         <table class="table table-bordered table-striped mb-0">
@@ -32,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in ReportDataList)
+                @foreach (var item in zapReportData)
                 {
                 <tr>
                     <th>@item.ProjectName</th>
@@ -57,28 +56,35 @@ else
     </div>
 }
 
-
 @code{
 
+    private string _projectId { get; set; }
+
     [Parameter]
-    public List<ReportData> ReportDataList { get; set; } = new List<ReportData>();
+    public List<ReportData> zapReportData { get; set; } = new List<ReportData>();
 
     protected override async Task OnInitializedAsync()
     {
         var user = await LocalStorageService.GetItem<NFTIntegration.Models.Account.User>("user");
+        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
 
-        ReportDataList = await AppsService.GetDastReportListForReport(user);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("projectId", out var projectId))
+        {
+            _projectId = projectId;
+            zapReportData = await AppsService.GetDastReportListByProject(user,Convert.ToInt32(_projectId));
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
             try
             {
                 var user = await LocalStorageService.GetItem<NFTIntegration.Models.Account.User>("user");
-                var zapAlerts = await AppsService.GetZapAlerts(user);
+                var zapAlerts = await AppsService.GetZapAlerts(user, Convert.ToInt32(_projectId));
                 await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts).ConfigureAwait(false);
+
             }
             catch (Exception e)
             {

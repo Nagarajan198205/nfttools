@@ -6,17 +6,67 @@
 @inject IAppsService AppsService
 @inject NavigationManager NavigationManager
 @using Classes
-@using Data;
+@using Data
 @using NFTIntegration.Models.Account
-
 
 <h2>Dashboard</h2>
 <div class="center">
     <h3>Vulnerable report summary</h3>
 </div>
-<div id="chartdiv" style="height: 400px;"></div>
+<div id="chartdiv" style="height: 300px;"></div>
+<br />
+<div class="center">
+    <h3>Vulnerable issues by project </h3>
+</div>
+<div id="barChartDiv" style="height: 300px;"></div>
+
+<br />
+
+@if (ReportDataList?.Count > 0)
+{
+    <div class="table-responsive-xl">
+        <table class="table table-bordered table-striped mb-0">
+            <thead class="bg-info">
+                <tr>
+                    <th scope="col" class="col-header">Project</th>
+                    <th scope="col" class="risk-high">High</th>
+                    <th scope="col" class="risk-medium">Medium</th>
+                    <th scope="col" class="risk-low">Low</th>
+                    <th scope="col" class="risk-info">Informational</th>
+                    <th scope="col" class="col-header">View Report</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ReportDataList)
+                {
+                    <tr>
+                        <th>@item.ProjectName</th>
+                        <td>@item.High</td>
+                        <td>@item.Medium</td>
+                        <td>@item.Low</td>
+                        <td>@item.Information</td>
+                        <td>
+                            <a href="apps/ViewDastProjectWiseReport?projectId=@item.ProjectId" target="_blank">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="center">
+        <h3>No report(s) available!</h3>
+    </div>
+}
+<div class="mt-5"></div>
 
 @code{
+
+    [Parameter]
+    public List<ReportData> ReportDataList { get; set; } = new List<ReportData>();
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -26,7 +76,9 @@
             {
                 var userDetails = await LocalStorageService.GetItem<User>("user");
                 var zapAlerts = await AppsService.GetZapAlerts(userDetails);
+                var issueList = await AppsService.GetIssuesCountByProject(userDetails);
                 await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
+                await jsRunTime.InvokeVoidAsync("generateBarChart", issueList);
             }
             catch (Exception e)
             {
@@ -39,15 +91,16 @@
     {
         try
         {
-            await Task.Run(() =>
-            {
-                var userDetails = LocalStorageService.GetItem<User>("user").Result;
 
-                if (userDetails == null || (userDetails != null && userDetails.UserId == 0))
-                {
-                    NavigationManager.NavigateTo("/account/login");
-                }
-            }).ConfigureAwait(false);
+            var userDetails = await LocalStorageService.GetItem<User>("user");
+
+            if (userDetails == null || (userDetails != null && userDetails.UserId == 0))
+            {
+                NavigationManager.NavigateTo("/account/login");
+            }
+
+            ReportDataList = await AppsService.GetDastReportList(userDetails);
+
         }
         catch (Exception e) { Console.WriteLine(e.StackTrace.ToString()); }
     }

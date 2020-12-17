@@ -8,11 +8,14 @@
 </div>
 
 <div class="main">
-    <div class="top-row px-4 float-left">
-        <NavLink class="nav-link" href="apps/createproject">
-            <span class="oi oi-project" aria-hidden="true"></span> Create project
-        </NavLink>
-    </div>
+    @if (IsTesterRole)
+    {
+        <div class="top-row px-4 float-left">
+            <NavLink class="nav-link" href="apps/createproject">
+                <span class="oi oi-project" aria-hidden="true"></span> Create project
+            </NavLink>
+        </div>
+    }
     <div class="top-row px-4">
         @if (LoggedIn)
         {
@@ -37,6 +40,11 @@
     public bool LoggedIn
     {
         get { return AccountService.User != null; }
+    }
+
+    public bool IsTesterRole
+    {
+        get { return AccountService.User != null && AccountService.User.Role.ToUpper().Equals("TESTER"); }
     }
 }
 
