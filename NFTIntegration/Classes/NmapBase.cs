@@ -2,13 +2,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Management.Automation;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NFTIntegration.Classes
 {
@@ -114,7 +110,10 @@ namespace NFTIntegration.Classes
 
                     foreach (var psObject in results)
                     {
-                        builder.AppendLine(psObject.BaseObject.ToString());
+                        if (psObject != null)
+                        {
+                            builder.AppendLine($"{psObject}");
+                        }
                     }
 
                     Output += $@"<br /><span>{System.Web.HttpUtility.HtmlEncode(builder.ToString())}</span>";

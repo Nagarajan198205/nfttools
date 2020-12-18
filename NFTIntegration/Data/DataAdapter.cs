@@ -124,15 +124,15 @@ namespace NFTIntegration.Data
                 {
                     reportDataList.Add(new ReportData
                     {
-                        ReportId = reader.GetInt64("ReportId"),
-                        High = reader.GetInt32("High"),
-                        Medium = reader.GetInt32("Medium"),
-                        Low = reader.GetInt32("Low"),
-                        Information = reader.GetInt32("Information"),
-                        ReportFileName = reader.GetString("ReportFileName"),
-                        RunDate = reader.GetString("RunDate"),
-                        ProjectName = reader.GetString("ProjectName"),
-                        ProjectId = reader.GetInt32("ProjectId")
+                        ReportId = reader.IsDBNull("ReportId") ? 0 : reader.GetInt64("ReportId"),
+                        High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High"),
+                        Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium"),
+                        Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low"),
+                        Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information"),
+                        ReportFileName = reader.IsDBNull("ReportFileName") ? string.Empty : reader.GetString("ReportFileName"),
+                        RunDate = reader.IsDBNull("RunDate") ? string.Empty : reader.GetString("RunDate"),
+                        ProjectName = reader.IsDBNull("ProjectName") ? string.Empty : reader.GetString("ProjectName"),
+                        ProjectId = reader.IsDBNull("ProjectId") ? 0 : reader.GetInt32("ProjectId")
                     });
                 }
 
@@ -167,15 +167,15 @@ namespace NFTIntegration.Data
                 {
                     reportDataList.Add(new ReportData
                     {
-                        ReportId = reader.GetInt64("ReportId"),
-                        High = reader.GetInt32("High"),
-                        Medium = reader.GetInt32("Medium"),
-                        Low = reader.GetInt32("Low"),
-                        Information = reader.GetInt32("Information"),
-                        ReportFileName = reader.GetString("ReportFileName"),
-                        RunDate = reader.GetString("RunDate"),
-                        ProjectName = reader.GetString("ProjectName"),
-                        ProjectId = reader.GetInt32("ProjectId")
+                        ReportId = reader.IsDBNull("ReportId") ? 0 : reader.GetInt64("ReportId"),
+                        High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High"),
+                        Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium"),
+                        Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low"),
+                        Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information"),
+                        ReportFileName = reader.IsDBNull("ReportFileName") ? string.Empty : reader.GetString("ReportFileName"),
+                        RunDate = reader.IsDBNull("RunDate") ? string.Empty : reader.GetString("RunDate"),
+                        ProjectName = reader.IsDBNull("ProjectName") ? string.Empty : reader.GetString("ProjectName"),
+                        ProjectId = reader.IsDBNull("ProjectId") ? 0 : reader.GetInt32("ProjectId")
                     });
                 }
 
@@ -209,12 +209,12 @@ namespace NFTIntegration.Data
                 {
                     reportDataList.Add(new ReportData
                     {
-                        High = reader.GetInt32("High"),
-                        Medium = reader.GetInt32("Medium"),
-                        Low = reader.GetInt32("Low"),
-                        Information = reader.GetInt32("Information"),
-                        ProjectName = reader.GetString("ProjectName"),
-                        ProjectId = reader.GetInt32("ProjectId")
+                        High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High"),
+                        Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium"),
+                        Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low"),
+                        Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information"),
+                        ProjectName = reader.IsDBNull("ProjectName") ? string.Empty : reader.GetString("ProjectName"),
+                        ProjectId = reader.IsDBNull("ProjectId") ? 0 : reader.GetInt32("ProjectId")
                     });
                 }
 
@@ -247,12 +247,12 @@ namespace NFTIntegration.Data
                 {
                     reportDataList.Add(new ReportData
                     {
-                        High = reader.GetInt32("High"),
-                        Medium = reader.GetInt32("Medium"),
-                        Low = reader.GetInt32("Low"),
-                        Information = reader.GetInt32("Information"),
-                        ProjectName = reader.GetString("ProjectName"),
-                        ProjectId = reader.GetInt32("ProjectId")
+                        High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High"),
+                        Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium"),
+                        Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low"),
+                        Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information"),
+                        ProjectName = reader.IsDBNull("ProjectName") ? string.Empty : reader.GetString("ProjectName"),
+                        ProjectId = reader.IsDBNull("ProjectId") ? 0 : reader.GetInt32("ProjectId")
                     });
                 }
 
@@ -316,10 +316,10 @@ namespace NFTIntegration.Data
 
                 if (reader.Read())
                 {
-                    reportData.High = reader.GetInt32("High");
-                    reportData.Medium = reader.GetInt32("Medium");
-                    reportData.Low = reader.GetInt32("Low");
-                    reportData.Information = reader.GetInt32("Information");
+                    reportData.High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High");
+                    reportData.Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium");
+                    reportData.Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low");
+                    reportData.Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information");
                 }
 
                 CloseConnection(sqliteConnection);
@@ -383,10 +383,10 @@ namespace NFTIntegration.Data
 
                 if (reader.Read())
                 {
-                    reportData.High = reader.GetInt32("High");
-                    reportData.Medium = reader.GetInt32("Medium");
-                    reportData.Low = reader.GetInt32("Low");
-                    reportData.Information = reader.GetInt32("Information");
+                    reportData.High = reader.IsDBNull("High") ? 0 : reader.GetInt32("High");
+                    reportData.Medium = reader.IsDBNull("Medium") ? 0 : reader.GetInt32("Medium");
+                    reportData.Low = reader.IsDBNull("Low") ? 0 : reader.GetInt32("Low");
+                    reportData.Information = reader.IsDBNull("Information") ? 0 : reader.GetInt32("Information");
                 }
 
                 CloseConnection(sqliteConnection);
