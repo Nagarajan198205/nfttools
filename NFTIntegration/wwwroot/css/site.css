@@ -494,3 +494,7 @@ div.login-page {
     width: 500px;
     margin: auto;    
 }
+
+.maxwidth-1140 {
+    max-width: 1140px;
+}
