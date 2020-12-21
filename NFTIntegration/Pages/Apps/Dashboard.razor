@@ -2,12 +2,11 @@
 @page "/apps/dashboard"
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRunTime
-@inject ILocalStorageService LocalStorageService
+@inject IAccountService AccountService
 @inject IAppsService AppsService
 @inject NavigationManager NavigationManager
 @using Classes
 @using Data
-@using NFTIntegration.Models.Account
 
 <h2>Dashboard</h2>
 <div class="center">
@@ -74,7 +73,7 @@ else
         {
             try
             {
-                var userDetails = await LocalStorageService.GetItem<User>("user");
+                var userDetails = AccountService.User;
                 var zapAlerts = await AppsService.GetZapAlerts(userDetails);
                 var issueList = await AppsService.GetIssuesCountByProject(userDetails);
                 await jsRunTime.InvokeVoidAsync("generateChartInValues", zapAlerts);
@@ -91,8 +90,7 @@ else
     {
         try
         {
-
-            var userDetails = await LocalStorageService.GetItem<User>("user");
+            var userDetails = AccountService.User;
 
             if (userDetails == null || (userDetails != null && userDetails.UserId == 0))
             {
