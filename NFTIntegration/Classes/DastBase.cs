@@ -104,7 +104,7 @@ namespace NFTIntegration.Classes
 
                 var user = await LocalStorageService.GetItem<User>("user");
 
-                await Task.Run(() => zapClient.Scan(ZapModel.Url, user.UserId, ZapModel.ProjectId));
+                await Task.Run(() => zapClient.Scan(ZapModel.Url, user.UserId, Convert.ToInt32(ProjectId)));
 
                 ReportFileContent = zapClient.ReportFileContent;
 

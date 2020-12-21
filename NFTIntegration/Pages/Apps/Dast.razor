@@ -28,7 +28,7 @@ else
             <div class="form-group">
                 <label>Project </label>
                 <Projects @bind-Value="ProjectId" @ref="ProjectList"></Projects>
-                <ValidationMessage For="@(() => ZapModel.ProjectId)" />
+                <ValidationMessage For="@(() => ProjectId)" />
             </div>
             <div class="form-control-wrapper">
                 <label class="form-control-label" for="catalogue">Url</label>
