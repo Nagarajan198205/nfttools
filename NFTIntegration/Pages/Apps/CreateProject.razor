@@ -61,16 +61,14 @@
                 var user = await LocalStorageService.GetItem<NFTIntegration.Models.Account.User>("user");
                 model.UserId = user.UserId;
                 await AppsService.CreateProject(model);
+                AlertService.Success("Project created successfully!", true, false);
             }
             catch (Exception ex)
             {
-                AlertService.Error(ex.Message, false, false);
+                AlertService.Error(ex.Message, true, false);
                 loading = false;
                 StateHasChanged();
             }
-
-            AlertService.Success("Project created successfully", false, false);
-
             loading = false;
             StateHasChanged();
         } }
