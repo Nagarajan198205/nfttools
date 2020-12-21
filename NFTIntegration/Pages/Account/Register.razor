@@ -78,6 +78,8 @@
         AlertService.Clear();
 
         loading = true;
+        StateHasChanged();
+
         try
         {
             await AccountService.Register(model);
@@ -86,6 +88,8 @@
         catch (Exception ex)
         {
             AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
         }
         loading = false;
         StateHasChanged();

@@ -3,72 +3,100 @@
 @using NFTIntegration.Classes
 @inject IAppsService AppsService
 @inject IAlertService AlertService
-@inject ILocalStorageService LocalStorageService
+@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
 
-    <div>
-        <div class="element-center">
-            <Alert />
-        </div>
-        <div class="shadow">
-            <div class="card">
-                <h4 class="card-header">Create a project</h4>
-                <div class="card-body">
-                    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-                        <DataAnnotationsValidator />
-                        <div class="form-group">
-                            <label>Project name</label>
-                            <InputText @bind-Value="model.ProjectName" class="form-control" />
-                            <ValidationMessage For="@(() => model.ProjectName)" />
-                        </div>
-                        <div class="form-group">
-                            <label>Start date</label>
-                            <InputDate @bind-Value="model.StartDate" class="form-control" />
-                            <ValidationMessage For="@(() => model.StartDate)" />
-                        </div>
-                        <div class="form-group">
-                            <label>End date</label>
-                            <InputDate @bind-Value="model.EndDate" class="form-control" />
-                            <ValidationMessage For="@(() => model.EndDate)" />
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <InputText @bind-Value="model.Description" class="form-control" />
-                            <ValidationMessage For="@(() => model.Description)" />
-                        </div>
-                        <button disabled="@loading" class="btn btn-primary">
-                            @if (loading)
-                            {
-                                <span class="spinner-border spinner-border-sm mr-1"></span>}
-                            Create
-                        </button>
-                        <NavLink href="apps/createproject" class="btn btn-link">Clear</NavLink>
-                    </EditForm>
-                </div>
+<div class="maxwidth-1140">
+    <div class="mt-lg-5">
+        <Alert />
+    </div>
+    <div class="shadow">
+        <div class="card">
+            <h4 class="card-header">Create a project</h4>
+            <div class="card-body">
+                <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label>Project name</label>
+                        <InputText @bind-Value="model.ProjectName" class="form-control" />
+                        <ValidationMessage For="@(() => model.ProjectName)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Start date</label>
+                        <InputDate @bind-Value="model.StartDate" class="form-control" />
+                        <ValidationMessage For="@(() => model.StartDate)" />
+                    </div>
+                    <div class="form-group">
+                        <label>End date</label>
+                        <InputDate @bind-Value="model.EndDate" class="form-control" />
+                        <ValidationMessage For="@(() => model.EndDate)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputText @bind-Value="model.Description" class="form-control" />
+                        <ValidationMessage For="@(() => model.Description)" />
+                    </div>
+                    <button disabled="@loading" class="btn btn-primary">
+                        @if (loading)
+                        {
+                            <span class="spinner-border spinner-border-sm mr-1"></span>}
+                        Create
+                    </button>
+                    <NavLink @onclick="Clear" class="btn btn-link">Clear</NavLink>
+                </EditForm>
             </div>
         </div>
     </div>
+</div>
 
-    @code { private Models.CreateProjectModel model = new Models.CreateProjectModel();
-        private bool loading;
+@code { private Models.CreateProjectModel model = new Models.CreateProjectModel();
+    private bool loading;
 
-        private async void OnValidSubmit()
+    private async void OnValidSubmit()
+    {
+        AlertService.Clear();
+
+        loading = true;
+        StateHasChanged();
+
+        try
         {
-            AlertService.Clear();
+            model.UserId = AccountService.User.UserId;
 
-            loading = true;
-            try
-            {
-                var user = await LocalStorageService.GetItem<NFTIntegration.Models.Account.User>("user");
-                model.UserId = user.UserId;
-                await AppsService.CreateProject(model);
-                AlertService.Success("Project created successfully!", true, false);
-            }
-            catch (Exception ex)
-            {
-                AlertService.Error(ex.Message, true, false);
-                loading = false;
-                StateHasChanged();
-            }
+            await AppsService.CreateProject(model);
+            AlertService.Success("Project created successfully!", true, false);
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message, true, false);
             loading = false;
             StateHasChanged();
-        } }
+        }
+        loading = false;
+        StateHasChanged();
+    }
+
+
+    private void Clear()
+    {
+        AlertService.Clear();
+
+        loading = true;
+        StateHasChanged();
+
+        try
+        {
+            model = new Models.CreateProjectModel();
+            model.UserId = AccountService.User.UserId;
+            NavigationManager.NavigateTo("apps/createproject");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message, true, false);
+            loading = false;
+            StateHasChanged();
+        }
+        loading = false;
+        StateHasChanged();
+    }
+}
