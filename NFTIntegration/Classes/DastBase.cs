@@ -25,6 +25,9 @@ namespace NFTIntegration.Classes
         [Inject]
         public ILocalStorageService LocalStorageService { get; set; }
 
+        [Inject]
+        public IAlertService AlertService { get; set; }
+
         public DastBase()
         {
         }
@@ -95,6 +98,8 @@ namespace NFTIntegration.Classes
         {
             try
             {
+                AlertService.Clear();
+
                 ReportFileContent = string.Empty;
 
                 IsScanning = true;
