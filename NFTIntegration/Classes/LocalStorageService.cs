@@ -23,13 +23,10 @@ namespace NFTIntegration.Classes
         {
             object catchItem = null;
 
-            await Task.Run(() =>
+            if (_cache.Contains(key))
             {
-                if (_cache.Contains(key))
-                {
-                    catchItem = _cache.Get(key);
-                }
-            });
+                catchItem = _cache.Get(key);
+            }
 
             return (T)catchItem;
         }

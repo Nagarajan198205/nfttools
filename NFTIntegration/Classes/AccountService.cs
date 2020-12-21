@@ -29,6 +29,8 @@ namespace NFTIntegration.Classes
         {
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
+
+            User = GetUserDetails().Result;
         }
 
         public async Task Initialize()
@@ -54,6 +56,21 @@ namespace NFTIntegration.Classes
         public async Task Register(AddUser model)
         {
             await Task.Run(() => new DataAdapter().AddUser(model)).ConfigureAwait(false);
+        }
+
+        public async Task<User> GetUserDetails()
+        {
+            if (User == null)
+            {
+                var userDetails = await _localStorageService.GetItem<User>(_userKey);
+
+                if (userDetails != null)
+                {
+                    User = userDetails;
+                }
+            }
+
+            return User;
         }
     }
 }
